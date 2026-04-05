@@ -254,7 +254,7 @@ nav {
   align-items: center;
   gap: 6px;
   margin-left: 10px;
-  color: var(--accent2);
+  color: var(--accent3);
   font-size: 10px;
 }
 .hero-status::before {
