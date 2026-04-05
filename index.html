@@ -1,9 +1,1161 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Harry Robey — IT Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ===========================
+       CSS VARIABLES & RESET
+    =========================== */
+    :root {
+      --bg:        #080c10;
+      --bg2:       #0d1117;
+      --bg3:       #111820;
+      --border:    #1e2d3d;
+      --accent:    #00e5ff;
+      --accent2:   #00ff88;
+      --accent3:   #ff6b35;
+      --text:      #c9d1d9;
+      --text-dim:  #5a7a8a;
+      --text-mid:  #8baabb;
+      --heading:   #e6edf3;
+      --mono:      'JetBrains Mono', monospace;
+      --sans:      'Syne', sans-serif;
+      --glow:      0 0 20px rgba(0, 229, 255, 0.3);
+      --glow2:     0 0 30px rgba(0, 255, 136, 0.2);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 14px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* Subtle grid overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,229,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,255,0.015) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Scanline flicker at top */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      animation: scanline 4s ease-in-out infinite;
+      z-index: 100;
+      opacity: 0.6;
+    }
+
+    @keyframes scanline {
+      0%   { transform: translateY(0); opacity: 0.6; }
+      50%  { opacity: 0.2; }
+      100% { transform: translateY(100vh); opacity: 0; }
+    }
+
+    /* ===========================
+       LAYOUT
+    =========================== */
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section { padding: 80px 0; }
+
+    /* ===========================
+       HERO
+    =========================== */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      padding: 0;
+    }
+
+    /* Radial glow background */
+    #hero::before {
+      content: '';
+      position: absolute;
+      top: 20%; left: -10%;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,229,255,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    #hero::after {
+      content: '';
+      position: absolute;
+      bottom: 10%; right: -5%;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,255,136,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      width: 100%;
+      padding: 120px 0 80px;
+    }
+
+    .hero-tag {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.2s;
+    }
+    .hero-tag::before {
+      content: '';
+      display: block;
+      width: 32px; height: 1px;
+      background: var(--accent);
+    }
+    .hero-tag-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-left: 16px;
+      color: var(--accent2);
+    }
+    .hero-tag-status::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent2);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    .hero-name {
+      font-family: var(--sans);
+      font-size: clamp(52px, 8vw, 96px);
+      font-weight: 800;
+      color: var(--heading);
+      line-height: 1;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.35s;
+    }
+
+    .hero-name span {
+      color: var(--accent);
+      text-shadow: var(--glow);
+    }
+
+    .hero-title {
+      font-family: var(--mono);
+      font-size: clamp(14px, 2vw, 18px);
+      color: var(--text-mid);
+      margin-bottom: 32px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.5s;
+    }
+
+    .hero-title .cursor {
+      display: inline-block;
+      width: 2px; height: 1.1em;
+      background: var(--accent);
+      vertical-align: text-bottom;
+      animation: blink 1s step-end infinite;
+      margin-left: 2px;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    .hero-bio {
+      max-width: 680px;
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.8;
+      margin-bottom: 48px;
+      padding-left: 20px;
+      border-left: 2px solid var(--border);
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.65s;
+    }
+
+    .hero-links {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.8s;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg);
+    }
+    .btn-primary:hover {
+      background: #fff;
+      box-shadow: var(--glow);
+      transform: translateY(-2px);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      background: rgba(0,229,255,0.05);
+      transform: translateY(-2px);
+    }
+
+    /* ===========================
+       SKILLS BAR
+    =========================== */
+    #skills-bar {
+      padding: 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .skills-scroll {
+      display: flex;
+      gap: 0;
+      width: max-content;
+      animation: marquee 30s linear infinite;
+    }
+    .skills-scroll:hover { animation-play-state: paused; }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    .skill-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 28px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      border-right: 1px solid var(--border);
+      white-space: nowrap;
+      transition: color 0.2s;
+    }
+    .skill-tag::before {
+      content: '//';
+      color: var(--accent);
+      opacity: 0.4;
+    }
+    .skill-tag:hover { color: var(--accent); }
+
+    /* ===========================
+       SECTION HEADERS
+    =========================== */
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 48px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--border), transparent);
+    }
+    .section-num {
+      color: var(--text-dim);
+      margin-right: 4px;
+    }
+
+    /* ===========================
+       CAREER / TIMELINE
+    =========================== */
+    #career { background: var(--bg); }
+
+    .timeline {
+      position: relative;
+      padding-left: 0;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 180px;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--border) 10%, var(--border) 90%, transparent);
+    }
+
+    /* ===========================
+       JOB CARD
+       To add a new role: duplicate a .job block and update the fields.
+       Fields to update:
+         .job-year       — date range e.g. 2025–NOW
+         .job-dot color  — keep as-is or change accent
+         .job-title h3   — role title
+         .job-title .company — company / location
+         .job-summary p  — short paragraph summary (optional)
+         .job-bullets li — bullet points
+    =========================== */
+    .job {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 0 40px;
+      margin-bottom: 56px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .job.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .job-meta {
+      text-align: right;
+      padding-right: 40px;
+      padding-top: 4px;
+      position: relative;
+    }
+
+    .job-dot {
+      position: absolute;
+      right: -5px;
+      top: 8px;
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 12px var(--accent);
+      border: 2px solid var(--bg);
+    }
+
+    .job-year {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .job-location {
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 0.05em;
+    }
+
+    .job-content {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 28px 32px;
+      position: relative;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .job-content:hover {
+      border-color: rgba(0,229,255,0.3);
+      box-shadow: 0 4px 40px rgba(0,0,0,0.4);
+    }
+
+    /* Arrow pointing left to timeline */
+    .job-content::before {
+      content: '';
+      position: absolute;
+      left: -8px;
+      top: 14px;
+      width: 8px; height: 8px;
+      background: var(--bg2);
+      border-left: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      transform: rotate(45deg);
+    }
+
+    .job-title {
+      margin-bottom: 16px;
+    }
+    .job-title h3 {
+      font-family: var(--sans);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--heading);
+      letter-spacing: -0.01em;
+    }
+    .job-title .company {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    .job-summary {
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .job-summary p {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    .job-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .job-bullets li {
+      font-size: 12px;
+      color: var(--text-mid);
+      padding-left: 16px;
+      position: relative;
+      line-height: 1.6;
+    }
+    .job-bullets li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent2);
+      font-size: 10px;
+      top: 2px;
+    }
+
+    /* Current role badge */
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+    .badge-current {
+      background: rgba(0,255,136,0.1);
+      color: var(--accent2);
+      border: 1px solid rgba(0,255,136,0.3);
+    }
+
+    /* ===========================
+       HIGHLIGHTS SECTION
+    =========================== */
+    #highlights {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .highlights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .highlight-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .highlight-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+    }
+    .highlight-card.c1::before { background: linear-gradient(90deg, var(--accent), transparent); }
+    .highlight-card.c2::before { background: linear-gradient(90deg, var(--accent2), transparent); }
+    .highlight-card.c3::before { background: linear-gradient(90deg, var(--accent3), transparent); }
+
+    .highlight-card:hover {
+      border-color: rgba(0,229,255,0.2);
+      transform: translateY(-3px);
+    }
+
+    .highlight-icon {
+      font-size: 28px;
+      margin-bottom: 16px;
+    }
+    .highlight-card h4 {
+      font-family: var(--sans);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--heading);
+      margin-bottom: 8px;
+    }
+    .highlight-card p {
+      font-size: 12px;
+      color: var(--text-mid);
+      line-height: 1.7;
+    }
+
+    /* ===========================
+       ABOUT / EXTRAS
+    =========================== */
+    #about { background: var(--bg); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    .about-block h3 {
+      font-family: var(--sans);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--heading);
+      margin-bottom: 16px;
+    }
+    .about-block p {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.8;
+      margin-bottom: 12px;
+    }
+
+    .bbc-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+    }
+    .bbc-icon {
+      font-size: 36px;
+      flex-shrink: 0;
+    }
+    .bbc-card h4 {
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--heading);
+      margin-bottom: 6px;
+    }
+    .bbc-card p {
+      font-size: 12px;
+      color: var(--text-mid);
+      line-height: 1.6;
+    }
+
+    /* ===========================
+       CONTACT / FOOTER
+    =========================== */
+    #contact {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    #contact h2 {
+      font-family: var(--sans);
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 800;
+      color: var(--heading);
+      margin-bottom: 16px;
+    }
+    #contact p {
+      color: var(--text-mid);
+      font-size: 13px;
+      margin-bottom: 40px;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    footer {
+      padding: 24px;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--text-dim);
+      font-family: var(--mono);
+    }
+    footer span { color: var(--accent); }
+
+    /* ===========================
+       NAV
+    =========================== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      background: rgba(8,12,16,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--heading);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+    }
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ===========================
+       ANIMATIONS
+    =========================== */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===========================
+       RESPONSIVE
+    =========================== */
+    @media (max-width: 768px) {
+      .timeline::before { left: 0; }
+      .job {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .job-meta {
+        text-align: left;
+        padding-right: 0;
+        padding-left: 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .job-dot { position: static; }
+      .job-content::before { display: none; }
+      .about-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .timeline::before { display: none; }
+    }
+
+    /* Expertise pills */
+    .expertise-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 24px;
+    }
+    .pill {
+      padding: 6px 14px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      color: var(--text-mid);
+      background: var(--bg2);
+      transition: all 0.2s;
+    }
+    .pill:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(0,229,255,0.05);
+    }
+  </style>
+</head>
 <body>
 
-<p>Hello World!</p>
+  <!-- NAV -->
+  <nav>
+    <a href="#hero" class="nav-logo">HR<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="#career">Career</a></li>
+      <li><a href="#highlights">Highlights</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="mailto:h@harryrobey.co.uk" class="btn btn-primary" style="font-size:11px;padding:8px 18px;">Hire Me</a>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="wrapper">
+      <div class="hero-inner">
+        <div class="hero-tag">
+          IT Professional · Bristol, UK
+          <span class="hero-tag-status">Open to Opportunities</span>
+        </div>
+
+        <h1 class="hero-name">Harry<br /><span>Robey</span></h1>
+
+        <p class="hero-title">
+          <span id="typed-title">IT Manager &amp; Infrastructure Specialist</span><span class="cursor"></span>
+        </p>
+
+        <p class="hero-bio">
+          An accomplished IT Manager with extensive experience in systems, networks, and cyber security. 
+          Adept at aligning technology with business objectives — from migrating 200-user organisations 
+          to Microsoft 365, deploying Jamf MDM, to achieving Cyber Essentials Plus certification. 
+          Skilled in vendor management, team leadership, and designing solutions that enhance 
+          organisational efficiency.
+        </p>
+
+        <div class="hero-links">
+          <a href="#career" class="btn btn-primary">View Career →</a>
+          <a href="https://www.linkedin.com/in/harryrobey" target="_blank" class="btn btn-ghost">LinkedIn ↗</a>
+          <a href="mailto:h@harryrobey.co.uk" class="btn btn-ghost">h@harryrobey.co.uk</a>
+        </div>
+
+        <div class="expertise-pills" style="margin-top:40px; opacity:0; animation: fadeUp 0.7s ease forwards 1s;">
+          <span class="pill">MDM</span>
+          <span class="pill">Cyber Security</span>
+          <span class="pill">Microsoft 365</span>
+          <span class="pill">Network Management</span>
+          <span class="pill">Intune</span>
+          <span class="pill">AWS</span>
+          <span class="pill">Jamf</span>
+          <span class="pill">UniFi</span>
+          <span class="pill">Hyper-V</span>
+          <span class="pill">Google Workspace</span>
+          <span class="pill">ISO 27001</span>
+          <span class="pill">Cyber Essentials Plus</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCROLLING SKILLS BAR -->
+  <div id="skills-bar">
+    <div class="skills-scroll">
+      <!-- First set -->
+      <span class="skill-tag">MDM</span>
+      <span class="skill-tag">Microsoft 365</span>
+      <span class="skill-tag">Cyber Security</span>
+      <span class="skill-tag">Jamf</span>
+      <span class="skill-tag">Intune</span>
+      <span class="skill-tag">UniFi</span>
+      <span class="skill-tag">AWS</span>
+      <span class="skill-tag">Hyper-V</span>
+      <span class="skill-tag">Google Workspace</span>
+      <span class="skill-tag">ISO 27001</span>
+      <span class="skill-tag">Cyber Essentials+</span>
+      <span class="skill-tag">Active Directory</span>
+      <span class="skill-tag">Cisco Meraki</span>
+      <span class="skill-tag">SonicWall</span>
+      <span class="skill-tag">VMware</span>
+      <!-- Duplicate for seamless loop -->
+      <span class="skill-tag">MDM</span>
+      <span class="skill-tag">Microsoft 365</span>
+      <span class="skill-tag">Cyber Security</span>
+      <span class="skill-tag">Jamf</span>
+      <span class="skill-tag">Intune</span>
+      <span class="skill-tag">UniFi</span>
+      <span class="skill-tag">AWS</span>
+      <span class="skill-tag">Hyper-V</span>
+      <span class="skill-tag">Google Workspace</span>
+      <span class="skill-tag">ISO 27001</span>
+      <span class="skill-tag">Cyber Essentials+</span>
+      <span class="skill-tag">Active Directory</span>
+      <span class="skill-tag">Cisco Meraki</span>
+      <span class="skill-tag">SonicWall</span>
+      <span class="skill-tag">VMware</span>
+    </div>
+  </div>
+
+  <!-- CAREER -->
+  <section id="career">
+    <div class="wrapper">
+      <div class="section-label"><span class="section-num">01 /</span> Career History</div>
+      <div class="timeline">
+
+        <!-- =====================================================
+             HOW TO ADD A NEW ROLE:
+             1. Copy the entire .job block below
+             2. Paste it ABOVE the first job (most recent at top)
+             3. Update: job-year, job-title h3, .company, job-summary p, job-bullets li items
+             4. Change .job-dot color if desired (see CSS variables)
+             ===================================================== -->
+
+        <!-- JOB: IT MANAGER (most recent) -->
+        <div class="job">
+          <div class="job-meta">
+            <span class="job-year">2022–2025</span>
+            <span class="job-location">Bristol, UK</span>
+            <div class="job-dot" style="background:var(--accent); box-shadow: 0 0 12px var(--accent);"></div>
+          </div>
+          <div class="job-content">
+            <div class="job-title">
+              <h3>IT Manager <span class="badge badge-current">Most Recent</span></h3>
+              <div class="company">Bristol, UK · Full-Time</div>
+            </div>
+            <div class="job-summary">
+              <p>Led all IT operations with a strong focus on IT strategy, security, and compliance. Ensured technology supported business growth while maintaining regulatory standards — blending strategic leadership with hands-on expertise in a secure, efficient, and scalable environment.</p>
+            </div>
+            <ul class="job-bullets">
+              <li>Managed and maintained IT infrastructure including networking, firewalls, and cloud services</li>
+              <li>Managed all company and staff-owned devices to ensure compliance and security</li>
+              <li>Led IT support operations, ensuring rapid resolution of technical issues while improving processes</li>
+              <li>Developed and enforced IT policies and procedures to support ISO 27001 and Cyber Essentials Plus certification</li>
+              <li>Created risk assessments ensuring business continuity and disaster recovery planning</li>
+              <li>Developed and maintained technical documentation for IT teams and end-users</li>
+              <li>Delivered company-wide security awareness training to reduce cyber threats and human error risks</li>
+              <li>Defined and executed IT strategy aligned with business goals and future scalability</li>
+              <li>Maintained full asset inventory and rolling plans for equipment refresh</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- JOB: HELPDESK MANAGER -->
+        <div class="job">
+          <div class="job-meta">
+            <span class="job-year">2022–2022</span>
+            <span class="job-location">Bristol, UK</span>
+            <div class="job-dot" style="background:var(--accent2); box-shadow: 0 0 12px var(--accent2);"></div>
+          </div>
+          <div class="job-content">
+            <div class="job-title">
+              <h3>Helpdesk Manager</h3>
+              <div class="company">Bristol, UK · Full-Time</div>
+            </div>
+            <ul class="job-bullets">
+              <li>Managed the helpdesk team and evaluated individual performance</li>
+              <li>Ensured customer service was timely and accurate on a daily basis</li>
+              <li>Recruited, trained, and supported helpdesk representatives and technicians</li>
+              <li>Set specific customer service standards and established best practices throughout technical support</li>
+              <li>Contributed to improving customer support by actively responding to queries and handling complaints</li>
+              <li>Developed daily, weekly, and monthly reports on helpdesk team productivity</li>
+              <li>Provided customer feedback to relevant internal teams including product developers</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- JOB: ACCOUNT MANAGER -->
+        <div class="job">
+          <div class="job-meta">
+            <span class="job-year">2021–2022</span>
+            <span class="job-location">Bristol, UK</span>
+            <div class="job-dot" style="background: #a78bfa; box-shadow: 0 0 12px #a78bfa;"></div>
+          </div>
+          <div class="job-content">
+            <div class="job-title">
+              <h3>Account Manager</h3>
+              <div class="company">Bristol, UK · Full-Time</div>
+            </div>
+            <ul class="job-bullets">
+              <li>Onboarded customers onto Managed Service Plans — migrating email to 365/Google, files to SharePoint, configuring Intune and producing policies/documentation</li>
+              <li>Provided on-site and remote support (Splashtop SOS) to customers</li>
+              <li>Managed Helpdesk tickets via Autotask</li>
+              <li>Installed, configured and maintained WiFi solutions (Ubiquiti)</li>
+              <li>Installed and configured network switches (Ubiquiti)</li>
+              <li>Configured and deployed iOS/Mac devices via Mosyle MDM</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- JOB: IT FIELD ENGINEER -->
+        <div class="job">
+          <div class="job-meta">
+            <span class="job-year">2020–2021</span>
+            <span class="job-location">Windsor, UK</span>
+            <div class="job-dot" style="background:var(--accent3); box-shadow: 0 0 12px var(--accent3);"></div>
+          </div>
+          <div class="job-content">
+            <div class="job-title">
+              <h3>IT Field Engineer</h3>
+              <div class="company">Windsor, UK · Full-Time</div>
+            </div>
+            <ul class="job-bullets">
+              <li>Provided on-site 1st, 2nd and 3rd line support to customers</li>
+              <li>Deployed, configured and maintained Windows Server 2012/2016/2019</li>
+              <li>Configured, migrated and supported email solutions (Office 365/Exchange/Google Admin)</li>
+              <li>Configured and maintained on-site and cloud backup solutions (BackupAssist/Cloudberry)</li>
+              <li>Configured and maintained firewall solutions (SonicWall)</li>
+              <li>Managed users and policies via Active Directory and Group Policy</li>
+              <li>Installed, configured and maintained WiFi solutions (Plasma Cloud/CloudTrax/Datto)</li>
+              <li>Configured and deployed iOS Devices via Hexnode MDM/Apple Schools Manager</li>
+              <li>DNS, DHCP, IP address allocation and management</li>
+              <li>Ran cabling, installed faceplates and terminated RJ45; installed touch panels and projectors</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- JOB: IT SYSTEMS MANAGER -->
+        <div class="job">
+          <div class="job-meta">
+            <span class="job-year">2018–2020</span>
+            <span class="job-location">Warfield, UK</span>
+            <div class="job-dot" style="background:var(--text-dim);"></div>
+          </div>
+          <div class="job-content">
+            <div class="job-title">
+              <h3>IT Systems Manager</h3>
+              <div class="company">Warfield, UK · Full-Time</div>
+            </div>
+            <ul class="job-bullets">
+              <li>General day-to-day running of company systems and infrastructure</li>
+              <li>Provided 1st/2nd line support to staff and students</li>
+              <li>Managed Active Directory, Group Policy, and Windows Server 2008/2012/2016</li>
+              <li>Deployed and maintained Microsoft Exchange 2010/Office 365</li>
+              <li>Managed and configured Microsoft Hyper-V and VMware vSphere environments</li>
+              <li>iPad management, configuration and deployment via Meraki MDM</li>
+              <li>Configured Cisco Meraki wireless solutions</li>
+              <li>Installed and configured Paxton Access Systems</li>
+              <li>Set up PXE Boot build servers and maintained Capita SIMS</li>
+              <li>Configured Avaya IP Phone Systems; maintained ShadowProtect backup solutions</li>
+            </ul>
+          </div>
+        </div>
+
+      </div><!-- /timeline -->
+    </div>
+  </section>
+
+  <!-- HIGHLIGHTS -->
+  <section id="highlights">
+    <div class="wrapper">
+      <div class="section-label"><span class="section-num">02 /</span> Key Achievements</div>
+      <div class="highlights-grid">
+        <div class="highlight-card c1">
+          <div class="highlight-icon">🔒</div>
+          <h4>Cyber Essentials Plus</h4>
+          <p>Led the organisation through full Cyber Essentials Plus certification for a 100-user company, developing policies, risk assessments, and implementing technical controls.</p>
+        </div>
+        <div class="highlight-card c2">
+          <div class="highlight-icon">☁️</div>
+          <h4>Google → Microsoft 365 Migration</h4>
+          <p>Successfully migrated a 200-user organisation from Google Workspace to Microsoft 365, including mail, files, and device management — zero downtime.</p>
+        </div>
+        <div class="highlight-card c3">
+          <div class="highlight-icon">🖥️</div>
+          <h4>Jamf MDM Deployment</h4>
+          <p>Deployed Jamf MDM from scratch to streamline Mac management and compliance across the organisation, automating provisioning and security enforcement.</p>
+        </div>
+        <div class="highlight-card c1">
+          <div class="highlight-icon">📻</div>
+          <h4>BBC Radio Bristol Expert</h4>
+          <p>Invited as a guest IT expert on BBC Radio Bristol's "Your Question Your Answer" segment — making complex technology accessible to the public.</p>
+        </div>
+        <div class="highlight-card c2">
+          <div class="highlight-icon">⚡</div>
+          <h4>15 Machines in a Day</h4>
+          <p>Assembled, configured and shipped 15 machines in a single working day — demonstrating speed, precision and a "works first time" approach.</p>
+        </div>
+        <div class="highlight-card c3">
+          <div class="highlight-icon">🔧</div>
+          <h4>Infrastructure Overhaul</h4>
+          <p>Completely redesigned and rebuilt a client's server room — replacing legacy switches, deploying new firewall, and transforming a chaotic setup into a clean, documented environment.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="wrapper">
+      <div class="section-label"><span class="section-num">03 /</span> Beyond the CV</div>
+      <div class="about-grid">
+        <div class="about-block">
+          <h3>The Human Behind the IT</h3>
+          <p>
+            I take a genuine pride in doing things right the first time — whether that's a tidy server rack, 
+            clean documentation, or a migration that users barely notice happened. 
+          </p>
+          <p>
+            Based in Bristol, I bring a blend of strategic thinking and roll-up-your-sleeves 
+            technical ability. I've worked across education, MSPs, and corporate environments — 
+            giving me a broad perspective that lets me adapt quickly to any organisation.
+          </p>
+          <p>
+            When I do get the rare chance to build a machine from scratch, I still time myself — 
+            old habits die hard!
+          </p>
+        </div>
+        <div class="about-block">
+          <div class="bbc-card" style="margin-bottom:20px;">
+            <div class="bbc-icon">📻</div>
+            <div>
+              <h4>BBC Radio Bristol</h4>
+              <p>Featured as a guest IT expert on "Your Question Your Answer" — breaking down complex tech topics for a general audience. Multiple appearances.</p>
+            </div>
+          </div>
+          <div class="bbc-card">
+            <div class="bbc-icon">🗄️</div>
+            <div>
+              <h4>Rack Perfectionist</h4>
+              <p>Ask to see the before/after of a server room I inherited from a previous supplier. Cables can be art — if you care enough.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="wrapper">
+      <div class="section-label" style="justify-content:center; margin-bottom:32px;"><span class="section-num">04 /</span> Get In Touch</div>
+      <h2>Let's Work Together</h2>
+      <p>Open to new IT Manager and senior infrastructure roles in and around Bristol.</p>
+      <div class="contact-links">
+        <a href="mailto:h@harryrobey.co.uk" class="btn btn-primary">h@harryrobey.co.uk</a>
+        <a href="https://www.linkedin.com/in/harryrobey" target="_blank" class="btn btn-ghost">LinkedIn ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrapper">
+      Harry Robey · Bristol, UK · <span>IT Manager</span> · Built to impress
+    </div>
+  </footer>
+
+  <script>
+    // Scroll-triggered fade-in for job cards
+    const jobs = document.querySelectorAll('.job');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    jobs.forEach(job => observer.observe(job));
+
+    // Highlight cards animate on scroll
+    const cards = document.querySelectorAll('.highlight-card');
+    const cardObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }, i * 80);
+          cardObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    cards.forEach(card => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(20px)';
+      card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+      cardObserver.observe(card);
+    });
+
+    // Typed title effect
+    const titles = [
+      'IT Manager & Infrastructure Specialist',
+      'Cyber Security Advocate',
+      'MDM & Compliance Expert',
+      'Microsoft 365 Specialist',
+      'Network & Systems Engineer'
+    ];
+    let titleIdx = 0, charIdx = 0, deleting = false;
+    const typedEl = document.getElementById('typed-title');
+    function typeLoop() {
+      const current = titles[titleIdx];
+      if (!deleting) {
+        typedEl.textContent = current.slice(0, charIdx + 1);
+        charIdx++;
+        if (charIdx === current.length) {
+          deleting = true;
+          setTimeout(typeLoop, 2200);
+          return;
+        }
+      } else {
+        typedEl.textContent = current.slice(0, charIdx - 1);
+        charIdx--;
+        if (charIdx === 0) {
+          deleting = false;
+          titleIdx = (titleIdx + 1) % titles.length;
+        }
+      }
+      setTimeout(typeLoop, deleting ? 40 : 70);
+    }
+    setTimeout(typeLoop, 1500);
+  </script>
 </body>
-
-
-  
 </html>
