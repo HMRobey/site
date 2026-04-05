@@ -261,7 +261,7 @@ nav {
   content: '';
   width: 6px; height: 6px;
   border-radius: 50%;
-  background: var(--accent2);
+  background: var(--accent3);
   animation: pulse 2.5s infinite;
   flex-shrink: 0;
 }
