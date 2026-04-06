@@ -613,7 +613,7 @@ nav {
 .skills-scroll {
   display: flex;
   width: max-content;
-  animation: marquee 30s linear infinite;
+  animation: marquee 40s linear infinite;
 }
 .skills-scroll:hover { animation-play-state: paused; }
 
