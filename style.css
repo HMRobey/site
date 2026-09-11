@@ -1,1036 +1,1308 @@
-/* ============================================================
-   HARRY ROBEY — CV SITE STYLESHEET
-   style.css
-
-   QUICK REFERENCE:
-   - Fonts:       'Geist' (headings), 'JetBrains Mono' (mono/body)
-   - Accent:      --accent  #00e5ff  (cyan)
-   - Accent 2:    --accent2 #00ff88  (green)
-   - Accent 3:    --accent3 #ff6b35  (orange)
-   - Background:  --bg      #080c10
-   ============================================================ */
-
-/* ===========================
-   GOOGLE FONTS IMPORT
-=========================== */
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Outfit:wght@400;600;700;800;900&display=swap');
-
-
-/* ===========================
-   CSS VARIABLES
-=========================== */
-:root {
-  --bg:        #080c10;
-  --bg2:       #0d1117;
-  --bg3:       #111820;
-  --border:    #1e2d3d;
-  --accent:    #00e5ff;
-  --accent2:   #00ff88;
-  --accent3:   #ff6b35;
-  --text:      #c9d1d9;
-  --text-dim:  #5a7a8a;
-  --text-mid:  #8baabb;
-  --heading:   #e6edf3;
-  --mono:      'JetBrains Mono', monospace;
-  --sans:      'Outfit', sans-serif;
-  --glow:      0 0 20px rgba(0, 229, 255, 0.3);
-  --glow2:     0 0 30px rgba(0, 255, 136, 0.2);
-  --radius:    4px;
-}
-
-
-/* ===========================
-   RESET & BASE
-=========================== */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html { scroll-behavior: smooth; }
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--mono);
-  font-size: 14px;
-  line-height: 1.7;
-  overflow-x: hidden;
-}
-
-/* Subtle grid overlay */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(0,229,255,0.015) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,229,255,0.015) 1px, transparent 1px);
-  background-size: 40px 40px;
-  pointer-events: none;
-  z-index: 0;
-}
-
-
-/* ===========================
-   LAYOUT
-=========================== */
-.wrapper {
-  position: relative;
-  z-index: 1;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-section { padding: 80px 0; }
-
-
-/* ===========================
-   NAVIGATION
-   To add a new nav link:
-   1. Copy a <li> inside .nav-links
-   2. Update the href and label text
-   3. For external links add target="_blank"
-   ========================== */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 50;
-  background: rgba(8,12,16,0.88);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--border);
-  padding: 0 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 56px;
-}
-
-.nav-logo {
-  font-family: var(--mono);
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--heading);
-  text-decoration: none;
-  letter-spacing: 0.05em;
-}
-.nav-logo span { color: var(--accent); }
-
-.nav-links {
-  display: flex;
-  gap: 28px;
-  list-style: none;
-  align-items: center;
-}
-
-.nav-links a {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  text-decoration: none;
-  transition: color 0.2s;
-  padding: 4px 0;
-  position: relative;
-}
-.nav-links a::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0;
-  width: 0; height: 1px;
-  background: var(--accent);
-  transition: width 0.2s;
-}
-.nav-links a:hover { color: var(--accent); }
-.nav-links a:hover::after { width: 100%; }
-
-.nav-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 18px;
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-decoration: none;
-  border-radius: var(--radius);
-  background: var(--accent);
-  color: var(--bg);
-  transition: all 0.2s;
-}
-.nav-cta:hover {
-  background: #fff;
-  box-shadow: var(--glow);
-}
-
-/* Hamburger for mobile */
-.nav-toggle {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  cursor: pointer;
-  padding: 4px;
-}
-.nav-toggle span {
-  display: block;
-  width: 22px; height: 2px;
-  background: var(--text-mid);
-  transition: all 0.2s;
-}
-
-
-/* ===========================
-   HERO
-=========================== */
-#hero {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  position: relative;
-  padding: 0;
-  overflow: hidden;
-}
-
-/* Radial glow blobs */
-.hero-glow-1 {
-  position: absolute;
-  top: 15%; left: -8%;
-  width: 600px; height: 600px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(0,229,255,0.07) 0%, transparent 70%);
-  pointer-events: none;
-}
-.hero-glow-2 {
-  position: absolute;
-  bottom: 10%; right: -4%;
-  width: 400px; height: 400px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(0,255,136,0.05) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-.hero-inner {
-  width: 100%;
-  padding: 120px 0 80px;
-  display: grid;
-  grid-template-columns: 1fr 420px;
-  gap: 60px;
-  align-items: center;
-}
-
-/* Left: text content */
-.hero-text {}
-
-.hero-tag {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--accent);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 28px;
-  opacity: 0;
-  animation: fadeUp 0.6s ease forwards 0.2s;
-}
-.hero-tag::before {
-  content: '';
-  display: block;
-  width: 32px; height: 1px;
-  background: var(--accent);
-  flex-shrink: 0;
-}
-
-.hero-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-left: 10px;
-  color: var(--accent3);
-  font-size: 10px;
-}
-.hero-status::before {
-  content: '';
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--accent3);
-  animation: pulse 2.5s infinite;
-  flex-shrink: 0;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.35; transform: scale(0.75); }
-}
-
-.hero-name {
-  font-family: var(--sans);
-  font-size: clamp(56px, 7.5vw, 96px);
-  font-weight: 900;
-  color: var(--heading);
-  line-height: 0.95;
-  letter-spacing: -0.03em;
-  margin-bottom: 12px;
-  opacity: 0;
-  animation: fadeUp 0.7s ease forwards 0.35s;
-}
-.hero-name .accent-word { color: var(--accent); text-shadow: var(--glow); }
-
-.hero-title-line {
-  font-family: var(--mono);
-  font-size: clamp(13px, 1.6vw, 16px);
-  color: var(--text-mid);
-  margin-bottom: 32px;
-  min-height: 24px;
-  opacity: 0;
-  animation: fadeUp 0.7s ease forwards 0.5s;
-}
-.hero-title-line .cursor {
-  display: inline-block;
-  width: 2px; height: 1em;
-  background: var(--accent);
-  vertical-align: middle;
-  margin-left: 2px;
-  animation: blink 1s step-end infinite;
-}
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-
-.hero-bio {
-  max-width: 560px;
-  font-size: 13px;
-  color: var(--text);
-  line-height: 1.85;
-  margin-bottom: 40px;
-  padding-left: 18px;
-  border-left: 2px solid var(--border);
-  opacity: 0;
-  animation: fadeUp 0.7s ease forwards 0.65s;
-}
-
-.hero-links {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  opacity: 0;
-  animation: fadeUp 0.7s ease forwards 0.8s;
-}
-
-.expertise-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-  margin-top: 32px;
-  opacity: 0;
-  animation: fadeUp 0.7s ease forwards 1s;
-}
-
-/* Right: network switch widget */
-.hero-visual {
-  opacity: 0;
-  animation: fadeUp 0.8s ease forwards 0.6s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
-
-
-/* ===========================
-   NETWORK SWITCH WIDGET
-=========================== */
-.switch-container {
-  width: 100%;
-  max-width: 420px;
-}
-
-.switch-unit {
-  background: linear-gradient(135deg, #0d1117 0%, #111820 100%);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 20px 22px;
-  position: relative;
-  box-shadow:
-    0 4px 30px rgba(0,0,0,0.6),
-    inset 0 1px 0 rgba(255,255,255,0.04);
-  margin-bottom: 14px;
-}
-
-/* Rack screw details */
-.switch-unit::before,
-.switch-unit::after {
-  content: '⬡';
-  position: absolute;
-  top: 50%; transform: translateY(-50%);
-  font-size: 10px;
-  color: var(--text-dim);
-  opacity: 0.4;
-}
-.switch-unit::before { left: 8px; }
-.switch-unit::after  { right: 8px; }
-
-.switch-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 14px;
-}
-
-.switch-brand {
-  font-family: var(--mono);
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  color: var(--text-dim);
-  text-transform: uppercase;
-}
-
-.switch-status-leds {
-  display: flex;
-  gap: 5px;
-}
-
-.status-led {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-}
-.status-led.pwr  { background: var(--accent2); box-shadow: 0 0 6px var(--accent2); animation: pulse 2s infinite; }
-.status-led.sys  { background: var(--accent);  box-shadow: 0 0 6px var(--accent);  animation: pulse 2.4s infinite 0.3s; }
-.status-led.warn { background: #888; }
-
-/* Port grid */
-.port-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin-bottom: 10px;
-}
-
-.port {
-  width: 18px; height: 14px;
-  border-radius: 2px;
-  position: relative;
-  cursor: default;
-  transition: transform 0.1s;
-}
-.port:hover { transform: scale(1.15); }
-
-/* Port body */
-.port-body {
-  width: 100%; height: 100%;
-  background: #0a0f14;
-  border: 1px solid #1a2535;
-  border-radius: 2px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-}
-
-/* Port LED indicator */
-.port-led {
-  position: absolute;
-  top: 2px; right: 2px;
-  width: 4px; height: 4px;
-  border-radius: 50%;
-}
-
-/* Port states — set by JS */
-.port.state-off  .port-led { background: #1a2535; }
-.port.state-active .port-led {
-  background: var(--accent2);
-  box-shadow: 0 0 5px var(--accent2);
-  animation: portBlink var(--blink-speed, 1s) step-end infinite var(--blink-delay, 0s);
-}
-.port.state-busy .port-led {
-  background: var(--accent);
-  box-shadow: 0 0 5px var(--accent);
-  animation: portBlink 0.2s step-end infinite var(--blink-delay, 0s);
-}
-.port.state-uplink .port-led {
-  background: var(--accent3);
-  box-shadow: 0 0 5px var(--accent3);
-}
-
-@keyframes portBlink {
-  0%,100% { opacity: 1; }
-  50%      { opacity: 0.1; }
-}
-
-/* RJ45 socket slot lines */
-.port-body::before {
-  content: '';
-  position: absolute;
-  bottom: 3px; left: 3px; right: 3px;
-  height: 1px;
-  background: rgba(0,229,255,0.08);
-}
-
-/* SFP uplink ports (wider) */
-.sfp-row {
-  display: flex;
-  gap: 6px;
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px solid var(--border);
-}
-.sfp-port {
-  width: 32px; height: 14px;
-  background: #0a0f14;
-  border: 1px solid #1a2535;
-  border-radius: 2px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.sfp-port::before {
-  content: 'SFP';
-  font-size: 6px;
-  color: var(--text-dim);
-  letter-spacing: 0.05em;
-  opacity: 0.5;
-}
-.sfp-port .port-led {
-  position: absolute;
-  top: 2px; right: 2px;
-  width: 4px; height: 4px;
-  border-radius: 50%;
-}
-.sfp-active .port-led {
-  background: var(--accent3);
-  box-shadow: 0 0 6px var(--accent3);
-}
-
-.switch-label {
-  font-family: var(--mono);
-  font-size: 8px;
-  color: var(--text-dim);
-  letter-spacing: 0.12em;
-  text-align: center;
-  margin-top: 6px;
-  text-transform: uppercase;
-  opacity: 0.6;
-}
-
-/* Live readout below switch */
-.network-readout {
-  width: 100%;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 14px 18px;
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--text-dim);
-  line-height: 1.9;
-}
-.readout-line { display: flex; justify-content: space-between; gap: 20px; }
-.readout-key  { color: var(--text-dim); }
-.readout-val  { color: var(--accent); }
-.readout-val.green { color: var(--accent2); }
-
-
-/* ===========================
-   BUTTONS
-=========================== */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
-  font-family: var(--mono);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-decoration: none;
-  border-radius: var(--radius);
-  transition: all 0.2s ease;
-  cursor: pointer;
-  border: none;
-}
-.btn-primary {
-  background: var(--accent);
-  color: var(--bg);
-}
-.btn-primary:hover {
-  background: #fff;
-  box-shadow: var(--glow);
-  transform: translateY(-2px);
-}
-.btn-ghost {
-  background: transparent;
-  color: var(--accent);
-  border: 1px solid var(--border);
-}
-.btn-ghost:hover {
-  border-color: var(--accent);
-  background: rgba(0,229,255,0.05);
-  transform: translateY(-2px);
-}
-
-
-/* ===========================
-   EXPERTISE PILLS
-=========================== */
-.pill {
-  padding: 5px 13px;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  color: var(--text-mid);
-  background: var(--bg2);
-  transition: all 0.2s;
-}
-.pill:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  background: rgba(0,229,255,0.05);
-}
-
-
-/* ===========================
-   SKILLS TICKER BAR
-=========================== */
-#skills-bar {
-  padding: 0;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  overflow: hidden;
-}
-
-.skills-scroll {
-  display: flex;
-  width: max-content;
-  animation: marquee 40s linear infinite;
-}
-.skills-scroll:hover { animation-play-state: paused; }
-
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-
-.skill-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 16px 28px;
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  border-right: 1px solid var(--border);
-  white-space: nowrap;
-  transition: color 0.2s;
-}
-.skill-tag::before {
-  content: '//';
-  color: var(--accent);
-  opacity: 0.4;
-}
-.skill-tag:hover { color: var(--accent); }
-
-
-/* ===========================
-   SECTION LABELS
-=========================== */
-.section-label {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 48px;
-}
-.section-label::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, var(--border), transparent);
-}
-.section-num { color: var(--text-dim); margin-right: 4px; }
-
-
-/* ===========================
-   CAREER TIMELINE
-=========================== */
-#career { background: var(--bg); }
-
-.timeline { position: relative; }
-
-.timeline::before {
-  content: '';
-  position: absolute;
-  left: 180px;
-  top: 0; bottom: 0;
-  width: 1px;
-  background: linear-gradient(to bottom, transparent, var(--border) 8%, var(--border) 92%, transparent);
-}
-
-/* ============================================================
-   JOB CARDS
-   HOW TO ADD A NEW ROLE:
-   1. Copy any .job block from index.html
-   2. Paste it ABOVE the current first job (newest at top)
-   3. Update these fields inside the copy:
-        .job-year       — e.g. 2025–Present
-        .job-dot style  — colour: var(--accent) for current, var(--accent2) for recent, etc.
-        h3 text         — job title
-        .company text   — company & location
-        .job-summary p  — optional short paragraph
-        .job-bullets li — responsibilities
-   4. If it's a current role, add <span class="badge badge-current">Current</span> after the h3 text
-   ============================================================ */
-.job {
-  display: grid;
-  grid-template-columns: 180px 1fr;
-  gap: 0 40px;
-  margin-bottom: 52px;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
-.job.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.job-meta {
-  text-align: right;
-  padding-right: 40px;
-  padding-top: 4px;
-  position: relative;
-}
-.job-dot {
-  position: absolute;
-  right: -5px; top: 8px;
-  width: 9px; height: 9px;
-  border-radius: 50%;
-  border: 2px solid var(--bg);
-}
-.job-year {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--accent);
-  letter-spacing: 0.05em;
-  display: block;
-  margin-bottom: 4px;
-}
-.job-location {
-  font-size: 10px;
-  color: var(--text-dim);
-  letter-spacing: 0.04em;
-}
-
-.job-content {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 26px 30px;
-  position: relative;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-.job-content:hover {
-  border-color: rgba(0,229,255,0.25);
-  box-shadow: 0 4px 40px rgba(0,0,0,0.4);
-}
-/* Arrow connector to timeline */
-.job-content::before {
-  content: '';
-  position: absolute;
-  left: -7px; top: 14px;
-  width: 7px; height: 7px;
-  background: var(--bg2);
-  border-left: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  transform: rotate(45deg);
-}
-
-.job-title { margin-bottom: 14px; }
-.job-title h3 {
-  font-family: var(--sans);
-  font-size: 17px;
-  font-weight: 700;
-  color: var(--heading);
-  letter-spacing: -0.01em;
-  line-height: 1.3;
-}
-.job-title .company {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--text-dim);
-  margin-top: 3px;
-}
-
-.job-summary {
-  margin-bottom: 14px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--border);
-}
-.job-summary p {
-  font-size: 12px;
-  color: var(--text);
-  line-height: 1.75;
-}
-
-.job-bullets {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-}
-.job-bullets li {
-  font-size: 12px;
-  color: var(--text-mid);
-  padding-left: 16px;
-  position: relative;
-  line-height: 1.6;
-}
-.job-bullets li::before {
-  content: '▸';
-  position: absolute;
-  left: 0; top: 2px;
-  color: var(--accent2);
-  font-size: 9px;
-}
-
-.badge {
-  display: inline-block;
-  padding: 2px 8px;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  border-radius: 2px;
-  margin-left: 10px;
-  vertical-align: middle;
-}
-.badge-current {
-  background: rgba(0,255,136,0.1);
-  color: var(--accent2);
-  border: 1px solid rgba(0,255,136,0.3);
-}
-
-
-/* ===========================
-   HIGHLIGHTS SECTION
-=========================== */
-#highlights {
-  background: var(--bg2);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
-
-.highlights-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 22px;
-}
-
-.highlight-card {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 26px;
-  position: relative;
-  overflow: hidden;
-  transition: border-color 0.2s, transform 0.2s;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.2s;
-}
-.highlight-card.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-.highlight-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-}
-.highlight-card.c1::before { background: linear-gradient(90deg, var(--accent), transparent); }
-.highlight-card.c2::before { background: linear-gradient(90deg, var(--accent2), transparent); }
-.highlight-card.c3::before { background: linear-gradient(90deg, var(--accent3), transparent); }
-.highlight-card:hover {
-  border-color: rgba(0,229,255,0.2);
-  transform: translateY(-3px) !important;
-}
-
-.highlight-icon { font-size: 26px; margin-bottom: 14px; }
-.highlight-card h4 {
-  font-family: var(--sans);
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--heading);
-  margin-bottom: 8px;
-}
-.highlight-card p {
-  font-size: 12px;
-  color: var(--text-mid);
-  line-height: 1.7;
-}
-
-
-/* ===========================
-   ABOUT SECTION
-=========================== */
-#about { background: var(--bg); }
-
-.about-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 48px;
-  align-items: start;
-}
-
-.about-block h3 {
-  font-family: var(--sans);
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--heading);
-  margin-bottom: 16px;
-  letter-spacing: -0.02em;
-}
-.about-block p {
-  font-size: 13px;
-  color: var(--text);
-  line-height: 1.85;
-  margin-bottom: 14px;
-}
-
-.info-card {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 22px;
-  display: flex;
-  align-items: flex-start;
-  gap: 18px;
-  margin-bottom: 16px;
-  transition: border-color 0.2s;
-}
-.info-card:hover { border-color: rgba(0,229,255,0.2); }
-
-.info-icon { font-size: 30px; flex-shrink: 0; }
-.info-card h4 {
-  font-family: var(--sans);
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--heading);
-  margin-bottom: 5px;
-}
-.info-card p {
-  font-size: 12px;
-  color: var(--text-mid);
-  line-height: 1.65;
-  margin-bottom: 0;
-}
-
-
-/* ===========================
-   CONTACT
-=========================== */
-#contact {
-  background: var(--bg2);
-  border-top: 1px solid var(--border);
-  text-align: center;
-}
-#contact h2 {
-  font-family: var(--sans);
-  font-size: clamp(30px, 4vw, 50px);
-  font-weight: 800;
-  color: var(--heading);
-  letter-spacing: -0.03em;
-  margin-bottom: 14px;
-}
-#contact p {
-  color: var(--text-mid);
-  font-size: 13px;
-  margin-bottom: 36px;
-  max-width: 440px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.contact-links {
-  display: flex;
-  justify-content: center;
-  gap: 14px;
-  flex-wrap: wrap;
-}
-
-
-/* ===========================
-   FOOTER
-=========================== */
-footer {
-  padding: 22px 24px;
-  text-align: center;
-  border-top: 1px solid var(--border);
-  font-size: 11px;
-  color: var(--text-dim);
-  font-family: var(--mono);
-}
-footer span { color: var(--accent); }
-
-
-/* ===========================
-   ANIMATIONS
-=========================== */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-
-/* ===========================
-   RESPONSIVE
-=========================== */
-@media (max-width: 900px) {
-  .hero-inner {
-    grid-template-columns: 1fr;
-    gap: 48px;
-  }
-  .hero-visual { order: -1; }
-  .switch-container { max-width: 360px; margin: 0 auto; }
-}
-
-@media (max-width: 768px) {
-  .timeline::before { display: none; }
-  .job {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-  .job-meta {
-    text-align: left;
-    padding-right: 0;
-    padding-left: 0;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .job-dot { position: static; width: 8px; height: 8px; flex-shrink: 0; }
-  .job-content::before { display: none; }
-  .about-grid { grid-template-columns: 1fr; gap: 32px; }
-  .nav-links { display: none; }
-  .nav-toggle { display: flex; }
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Harry Robey</title>
+  <meta name="description" content="Harry Robey — Head of IT based in Bristol, UK." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ============================================================
+       NAVIGATION
+       To add a new page link (e.g. Blog or GitHub):
+       1. Copy a <li> element below
+       2. Change the href to your page or URL
+       3. Update the label text
+       4. For external links add: target="_blank" rel="noopener"
+       ============================================================ -->
+  <nav>
+    <a href="#hero" class="nav-logo">HR<span>.</span></a>
+
+    <ul class="nav-links">
+      <li><a href="#career">Career</a></li>
+      <li><a href="#highlights">Highlights</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+
+      <!-- ADD NEW PAGES HERE — examples below, uncomment to enable:
+      <li><a href="/blog">Blog</a></li>
+      <li><a href="https://github.com/yourusername" target="_blank" rel="noopener">GitHub ↗</a></li>
+      -->
+    </ul>
+
+    <a href="mailto:harry@robey.cc" class="nav-cta">Contact</a>
+
+    <!-- Mobile hamburger (toggle handled by JS) -->
+    <div class="nav-toggle" id="navToggle" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+
+  <!-- ============================================================
+       HERO
+  ============================================================ -->
+  <section id="hero">
+    <div class="hero-glow-1"></div>
+    <div class="hero-glow-2"></div>
+
+    <div class="wrapper">
+      <div class="hero-inner">
+
+        <!-- Left: Text Content -->
+        <div class="hero-text">
+
+          <div class="hero-tag">
+            IT Professional &middot; Bristol, UK
+            <span class="hero-status">Not actively applying</span>
+          </div>
+
+          <h1 class="hero-name">
+            Harry<br /><span class="accent-word">Robey</span>
+          </h1>
+
+          <p class="hero-title-line">
+            <span id="typed-title">Head of IT</span><span class="cursor"></span>
+          </p>
+
+          <p class="hero-bio">
+An experienced IT leader specialising in the design, delivery, and governance of secure, scalable technology environments. Proven track record of aligning IT strategy with business objectives, leading transformation across cloud platforms, cybersecurity, and end-user services. Combines hands-on technical expertise with strategic oversight, having delivered organisation-wide initiatives including Microsoft 365 migrations, enterprise device management with Jamf and Intune, and successful Cyber Essentials Plus and ISO 27001 compliance. Recognised for building high-performing IT functions, strengthening security posture, and partnering with senior stakeholders to drive operational efficiency and support business growth.
+          </p>
+
+          <div class="hero-links">
+            <a href="#career" class="btn btn-primary">View Career →</a>
+            <a href="https://www.linkedin.com/in/harryrobey" target="_blank" rel="noopener" class="btn btn-ghost">LinkedIn ↗</a>
+            <a href="mailto:harry@robey.cc" class="btn btn-ghost">harry@robey.cc</a>
+          </div>
+
+<div class="expertise-pills">
+  <span class="pill">IT Strategy</span>
+  <span class="pill">Cyber Security & Risk</span>
+  <span class="pill">ISO 27001 & Compliance</span>
+  <span class="pill">Stakeholder Engagement</span>
+  <span class="pill">Team Leadership</span>
+  <span class="pill">Service Delivery & SLAs</span>
+  <span class="pill">Microsoft 365</span>
+  <span class="pill">Endpoint Management (Intune & Jamf)</span>
+  <span class="pill">Cloud & Infrastructure</span>
+  <span class="pill">Network Architecture</span>
+  <span class="pill">Business Continuity & DR</span>
+  <span class="pill">Vendor Management</span>
+</div>
+        </div><!-- /hero-text -->
+
+        <!-- Right: Interactive patch bay -->
+        <div class="hero-visual">
+          <div class="switch-container">
+
+            <!-- Patch-cable physics layer (drawn over the switches by JS).
+                 Rules of the game live in the info panel at the bottom. -->
+            <canvas class="patch-canvas" id="patchCanvas" aria-hidden="true"></canvas>
+            <div class="plug-handles" id="plugHandles"></div>
+
+            <!-- Core switch -->
+            <div class="switch-unit" data-switch="core" data-name="BRS-CORE-SW01">
+              <div class="switch-header">
+                <span class="switch-brand">BRS-CORE-SW01</span>
+                <div class="switch-status-leds">
+                  <div class="status-led pwr"  title="Power"></div>
+                  <div class="status-led sys"  title="System"></div>
+                  <div class="status-led warn" title="Alert — none"></div>
+                </div>
+              </div>
+              <div class="port-grid" id="portGridCore" style="--cols: 14;"></div>
+              <div class="sfp-row">
+                <div class="sfp-port sfp-active" title="Uplink — firewall A"><div class="port-led"></div></div>
+                <div class="sfp-port sfp-active" title="Uplink — firewall B"><div class="port-led"></div></div>
+                <div class="sfp-port"><div class="port-led"></div></div>
+                <div class="sfp-port"><div class="port-led"></div></div>
+              </div>
+              <div class="switch-label">28-Port L3 Core — Bristol DC-01 · Rack A1</div>
+            </div>
+
+            <!-- Access switches, one per floor -->
+            <div class="access-row">
+              <div class="switch-unit" data-switch="access" data-name="BRS-ACC-SW01">
+                <div class="switch-header">
+                  <span class="switch-brand">BRS-ACC-SW01</span>
+                  <div class="switch-status-leds">
+                    <div class="status-led pwr" title="Power"></div>
+                    <div class="status-led sys" title="System"></div>
+                  </div>
+                </div>
+                <div class="port-grid" id="portGridAcc1" style="--cols: 6;"></div>
+                <div class="switch-label">12-Port PoE+ — Floor 1</div>
+              </div>
+
+              <div class="switch-unit" data-switch="access" data-name="BRS-ACC-SW02">
+                <div class="switch-header">
+                  <span class="switch-brand">BRS-ACC-SW02</span>
+                  <div class="switch-status-leds">
+                    <div class="status-led pwr" title="Power"></div>
+                    <div class="status-led sys" title="System"></div>
+                  </div>
+                </div>
+                <div class="port-grid" id="portGridAcc2" style="--cols: 6;"></div>
+                <div class="switch-label">12-Port PoE+ — Floor 2</div>
+              </div>
+            </div>
+
+            <!-- Live network readout -->
+            <div class="network-readout">
+              <div class="readout-line">
+                <span class="readout-key">uptime</span>
+                <span class="readout-val green" id="readoutUptime">847d 14h 22m</span>
+              </div>
+              <div class="readout-line">
+                <span class="readout-key">ports active</span>
+                <span class="readout-val" id="readoutPorts">—</span>
+              </div>
+              <div class="readout-line">
+                <span class="readout-key">throughput</span>
+                <span class="readout-val" id="readoutThroughput">—</span>
+              </div>
+              <div class="readout-line">
+                <span class="readout-key">uplinks</span>
+                <span class="readout-val" id="readoutLinks">—</span>
+              </div>
+              <div class="readout-line">
+                <span class="readout-key">alerts</span>
+                <span class="readout-val green" id="readoutAlerts">0 active</span>
+              </div>
+            </div>
+
+            <!-- Status line + rules toggle (text set by JS) -->
+            <div class="patch-hint-row">
+              <div class="patch-hint" id="patchHint" aria-live="polite"></div>
+              <button type="button" class="patch-info-btn" id="patchInfoBtn"
+                      aria-expanded="false" aria-controls="patchInfo" title="Patching standard">i</button>
+            </div>
+
+            <!-- Rules panel -->
+            <div class="patch-info" id="patchInfo" tabindex="-1" hidden>
+              <div class="patch-info-head">
+                <span>Patching standard — BRS-DC01</span>
+                <button type="button" class="patch-info-close" id="patchInfoClose" aria-label="Close">×</button>
+              </div>
+              <ol class="patch-rules">
+                <li>Every lead carries one VLAN, shown by its colour. It has to land in a port with the matching colour key under the jack — at both ends.
+                  <span class="vlan-key">
+                    <span class="vlan-dot" style="--c: var(--accent);"></span>Data
+                    <span class="vlan-dot" style="--c: var(--accent2);"></span>Voice
+                    <span class="vlan-dot" style="--c: var(--accent3);"></span>Management
+                  </span>
+                </li>
+                <li>Uplinks run from the core to an access switch. Both ends on one switch, or access to access, gets blocked by spanning tree.</li>
+                <li>Link lights: <em class="led-green">green</em> up · <em class="led-red">red</em> VLAN mismatch · <em class="led-amber">amber</em> STP blocked · <em class="led-cyan">cyan</em> negotiating.</li>
+              </ol>
+              <p class="patch-goal">Goal: both floors patched — six uplinks, all green. Drag either plug. Tab to a plug and use Enter or the arrow keys if you'd rather not drag.</p>
+            </div>
+
+          </div><!-- /switch-container -->
+        </div><!-- /hero-visual -->
+
+      </div><!-- /hero-inner -->
+    </div><!-- /wrapper -->
+  </section>
+
+
+  <!-- ============================================================
+       SKILLS TICKER
+  ============================================================ -->
+  <div id="skills-bar">
+<div class="skills-scroll">
+  <span class="skill-tag">IT Strategy</span>
+  <span class="skill-tag">Cyber Security</span>
+  <span class="skill-tag">Risk Management</span>
+  <span class="skill-tag">ISO 27001</span>
+  <span class="skill-tag">Cyber Essentials+</span>
+  <span class="skill-tag">Business Continuity</span>
+  <span class="skill-tag">Disaster Recovery</span>
+  <span class="skill-tag">Stakeholder Management</span>
+  <span class="skill-tag">Vendor Management</span>
+  <span class="skill-tag">Service Delivery</span>
+  <span class="skill-tag">SLA Management</span>
+  <span class="skill-tag">Helpdesk Transformation</span>
+  <span class="skill-tag">Microsoft 365</span>
+  <span class="skill-tag">Azure AD / Entra ID</span>
+  <span class="skill-tag">Intune</span>
+  <span class="skill-tag">Jamf</span>
+  <span class="skill-tag">Endpoint Security</span>
+  <span class="skill-tag">MDM</span>
+  <span class="skill-tag">Cloud Architecture</span>
+  <span class="skill-tag">AWS</span>
+  <span class="skill-tag">Networking</span>
+  <span class="skill-tag">Network Architecture</span>
+  <span class="skill-tag">UniFi</span>
+  <span class="skill-tag">Cisco Meraki</span>
+  <span class="skill-tag">SonicWall</span>
+  <span class="skill-tag">Firewalls</span>
+  <span class="skill-tag">VPN</span>
+  <span class="skill-tag">Active Directory</span>
+  <span class="skill-tag">Group Policy</span>
+  <span class="skill-tag">Windows Server</span>
+  <span class="skill-tag">Hyper-V</span>
+  <span class="skill-tag">VMware</span>
+  <span class="skill-tag">Backup & Recovery</span>
+  <span class="skill-tag">RMM</span>
+  <span class="skill-tag">Patch Management</span>
+  <span class="skill-tag">Automation</span>
+
+  <!-- Duplicate set for seamless loop -->
+  <span class="skill-tag">IT Strategy</span>
+  <span class="skill-tag">Cyber Security</span>
+  <span class="skill-tag">Risk Management</span>
+  <span class="skill-tag">ISO 27001</span>
+  <span class="skill-tag">Cyber Essentials+</span>
+  <span class="skill-tag">Business Continuity</span>
+  <span class="skill-tag">Disaster Recovery</span>
+  <span class="skill-tag">Stakeholder Management</span>
+  <span class="skill-tag">Vendor Management</span>
+  <span class="skill-tag">Service Delivery</span>
+  <span class="skill-tag">SLA Management</span>
+  <span class="skill-tag">Helpdesk Transformation</span>
+  <span class="skill-tag">Microsoft 365</span>
+  <span class="skill-tag">Azure AD / Entra ID</span>
+  <span class="skill-tag">Intune</span>
+  <span class="skill-tag">Jamf</span>
+  <span class="skill-tag">Endpoint Security</span>
+  <span class="skill-tag">MDM</span>
+  <span class="skill-tag">Cloud Architecture</span>
+  <span class="skill-tag">AWS</span>
+  <span class="skill-tag">Networking</span>
+  <span class="skill-tag">Network Architecture</span>
+  <span class="skill-tag">UniFi</span>
+  <span class="skill-tag">Cisco Meraki</span>
+  <span class="skill-tag">SonicWall</span>
+  <span class="skill-tag">Firewalls</span>
+  <span class="skill-tag">VPN</span>
+  <span class="skill-tag">Active Directory</span>
+  <span class="skill-tag">Group Policy</span>
+  <span class="skill-tag">Windows Server</span>
+  <span class="skill-tag">Hyper-V</span>
+  <span class="skill-tag">VMware</span>
+  <span class="skill-tag">Backup & Recovery</span>
+  <span class="skill-tag">RMM</span>
+  <span class="skill-tag">Patch Management</span>
+  <span class="skill-tag">Automation</span>
+</div>
+  </div>
+
+
+  <!-- ============================================================
+       CAREER TIMELINE
+       HOW TO ADD A NEW ROLE — see style.css for full instructions.
+       Quick guide: copy any .job block, paste above the first one,
+       update year / title / company / bullets.
+  ============================================================ -->
+  <section id="career">
+    <div class="wrapper">
+      <div class="section-label"><span class="section-num">01 /</span> Career History</div>
+      <div class="timeline">
+
+        <!-- JOB: Head of IT -->
+        <div class="job">
+          <div class="job-meta">
+            <span class="job-year">2025–Current</span>
+            <span class="job-location">Bristol, UK</span>
+            <div class="job-dot" style="background:var(--accent2); box-shadow:0 0 12px var(--accent2);"></div>
+          </div>
+          <div class="job-content">
+            <div class="job-title">
+              <h3>Head of IT</h3>
+              <div class="company">Supply Chain Consultancy · Bristol, UK · Full-Time</div>
+            </div>
+            <div class="job-summary">
+              <p>Promoted to Head of IT to lead the organisation’s internal technology function, building on a successful period of operational and strategic delivery. Responsible for defining IT direction, strengthening governance, and ensuring technology continues to scale effectively alongside business growth.</p>
+              <br>
+              <p>Working closely with senior leadership, including the COO, CEO, and Ops Director, to align IT strategy with organisational objectives while maintaining a strong focus on security, resilience, and user experience.</p>
+            </div>
+            <ul class="job-bullets">
+              <li>Define and deliver IT strategy aligned with business growth and operational priorities</li>
+              <li>Provide leadership and oversight across IT operations, service delivery, and security</li>
+              <li>Own cybersecurity posture, compliance, and ongoing certification requirements</li>
+              <li>Partner with senior stakeholders to support decision-making and long-term planning</li>
+              <li>Drive continuous improvement across systems, processes, and user experience</li>
+              <li>Oversee business continuity and disaster recovery planning and testing</li>
+              <li>Manage vendors, suppliers, and technology partners</li>
+            </ul>
+            <br>
+            <div class="job-title">
+              <h3>IT Manager</h3>
+            </div>
+            <div class="job-summary">
+              <p>Brought in to take ownership of IT operations and introduce a more strategic, structured approach to technology, bridging the gap between day-to-day support and long-term business direction. Quickly took ownership of internal IT operations, enabling senior leadership to step back while establishing a structured, secure, and scalable technology environment.</p>
+              <br>
+              <p>Operated across both technical delivery and strategic planning, with a strong focus on security, compliance, and service maturity.</p>
+            </div>
+            <ul class="job-bullets">
+              <li>Took ownership of IT operations, working closely with senior leadership to align technology with business strategy</li>
+              <li>Successfully delivered Cyber Essentials Plus and ISO 27001 renewals, with external auditors recognising significant improvements in policy maturity and implementation</li>
+              <li>Redesigned the organisation’s cybersecurity policy framework, improving accessibility, structure, and audit readiness</li>
+              <li>Introduced a modern helpdesk platform with SLA tracking and user feedback, improving service visibility and performance</li>
+              <li>Designed and implemented a mature Microsoft Intune environment, automating device configuration and strengthening endpoint security</li>
+              <li>Delivered secure network infrastructure for a new office, following a security-first design approach</li>
+              <li>Implemented enhanced backup and data protection solutions to improve resilience</li>
+              <li>Rolled out RMM and endpoint protection tooling to improve patching, visibility, and overall security posture</li>
+              <li>Led IT support operations, ensuring SLA adherence and continuous service improvement</li>
+              <li>Developed and tested business continuity and disaster recovery plans</li>
+              <li>Delivered AV and meeting room technology for new office environments</li>
+              <li>Built lightweight internal tooling to improve user experience and operational efficiency</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- JOB: IT MANAGER -->
+        <div class="job">
+          <div class="job-meta">
+            <span class="job-year">2022–2025</span>
+            <span class="job-location">Bristol, UK</span>
+            <div class="job-dot" style="background:var(--accent); box-shadow:0 0 12px var(--accent);"></div>
+          </div>
+          <div class="job-content">
+            <div class="job-title">
+              <h3>IT Manager</h3>
+              <div class="company">Award Winning Creative Agency · Bristol, UK · Full-Time</div>
+            </div>
+            <div class="job-summary">
+              <p>Joined during a period of rapid business growth and took full ownership of the IT function, transforming a developing environment into a secure, scalable, and modern technology estate. Operating as the sole IT Manager, I was responsible for everything from day-to-day support through to long-term strategy, compliance, and infrastructure design. The role combined hands-on technical delivery with leadership across cybersecurity, cloud platforms, and user experience.</p>
+            </div>
+            <ul class="job-bullets">
+              <li>Led a full transformation to a cloud-first, security-focused IT environment</li>
+              <li>Delivered a company-wide migration from Google Workspace to Microsoft 365 (Exchange Online, SharePoint, Teams, OneDrive)</li>
+              <li>Implemented Jamf Pro to enable secure, scalable Mac fleet management and zero-touch deployment</li>
+              <li>Standardised endpoint management and security using Jamf Protect and Microsoft Intune</li>
+              <li>Achieved Cyber Essentials Plus certification and supported ISO 27001-aligned policies and processes</li>
+              <li>Introduced a structured helpdesk function with SLAs, improving response times and overall service quality</li>
+              <li>Defined and enforced IT policies, procedures, and security standards across the business</li>
+              <li>Developed risk assessments, disaster recovery plans, and business continuity strategies</li>
+              <li>Managed core infrastructure including networking, firewalls, cloud services, and endpoint environments</li>
+              <li>Maintained full asset lifecycle management, including procurement and refresh planning</li>
+              <li>Delivered company-wide security awareness training to reduce human risk factors</li>
+              <li>Partnered with senior stakeholders across the business to align IT with organisational goals</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- JOB: HELPDESK MANAGER -->
+        <div class="job">
+          <div class="job-meta">
+            <span class="job-year">2021–2022</span>
+            <span class="job-location">Bristol, UK</span>
+            <div class="job-dot" style="background:var(--accent2); box-shadow:0 0 12px var(--accent2);"></div>
+          </div>
+          <div class="job-content">
+            <div class="job-title">
+              <h3>Helpdesk Manager</h3>
+              <div class="company">MSP · Bristol, UK · Full-Time</div>
+            </div>
+            <div class="job-summary">
+              <p>Promoted to lead the helpdesk team, managing day-to-day operations while acting as the escalation point for complex technical issues. Focused on improving service delivery, implementing structure, and developing a high-performing support function within a busy MSP environment.</p>
+            </div>
+            <ul class="job-bullets">
+              <li>Led and mentored a team of support engineers, driving performance and development</li>
+              <li>Managed ticket workflows, escalations, and SLA compliance</li>
+              <li>Introduced and refined processes to improve efficiency and customer experience</li>
+              <li>Provided 3rd line support across Microsoft 365, Azure AD, Intune, and Google Workspace</li>
+              <li>Produced reporting on team performance and service metrics</li>
+              <li>Contributed to continuous service improvement aligned with ITIL practices</li>
+            </ul>
+            <br>
+            <div class="job-title">
+              <h3>Account Manager</h3>
+            </div>
+            <div class="job-summary">
+              <p>Delivered end-to-end IT services for a diverse portfolio of SMEs and startups, combining account management with advanced technical support. Acted as a trusted advisor to clients, supporting both operational needs and longer-term IT planning.</p>
+            </div>
+            <ul class="job-bullets">
+              <li>Managed client relationships, onboarding, and IT roadmaps</li>
+              <li>Delivered migrations to Microsoft 365 and Google Workspace</li>
+              <li>Deployed and configured Intune, SharePoint, and endpoint policies</li>
+              <li>Installed and supported networking solutions (primarily Ubiquiti)</li>
+              <li>Provided on-site and remote support, including complex escalations</li>
+              <li>Supported documentation, process improvement, and service optimisation</li>
+            </ul>
+          </div>
+        </div>
+
+
+        <!-- JOB: IT FIELD ENGINEER -->
+        <div class="job">
+          <div class="job-meta">
+            <span class="job-year">2020–2021</span>
+            <span class="job-location">Windsor, UK</span>
+            <div class="job-dot" style="background:var(--accent3); box-shadow:0 0 12px var(--accent3);"></div>
+          </div>
+          <div class="job-content">
+            <div class="job-title">
+              <h3>IT Field Engineer</h3>
+              <div class="company">MSP · Windsor, UK · Full-Time</div>
+            </div>
+            <div class="job-summary">
+              <p>Worked within an MSP supporting a wide range of organisations across multiple sectors, balancing remote support with on-site delivery. Gained broad exposure to infrastructure, networking, and end-user environments, developing strong technical and client-facing skills.</p>
+            </div>
+            <ul class="job-bullets">
+              <li>Delivered 1st to 3rd line support across Windows, macOS, and mobile platforms</li>
+              <li>Deployed and maintained Windows Server environments (2012–2019), including Active Directory and Group Policy</li>
+              <li>Managed Microsoft 365, Exchange, and Google Workspace migrations and support</li>
+              <li>Configured firewall and backup solutions (SonicWall, BackupAssist, Cloudberry)</li>
+              <li>Installed and maintained wireless networks (Plasma Cloud, CloudTrax, Datto)</li>
+              <li>Carried out physical installations including cabling, AV systems, and hardware deployments</li>
+              <li>Supported DNS, DHCP, and general network configuration</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- JOB: IT SYSTEMS MANAGER -->
+        <div class="job">
+          <div class="job-meta">
+            <span class="job-year">2018–2020</span>
+            <span class="job-location">Warfield, UK</span>
+            <div class="job-dot" style="background:var(--text-dim);"></div>
+          </div>
+          <div class="job-content">
+            <div class="job-title">
+              <h3>IT Systems Manager</h3>
+              <div class="company">SEN School · Warfield, UK · Full-Time</div>
+            </div>
+            <div class="job-summary">
+              <p>Promoted into a leadership role within an educational environment, responsible for the day-to-day management of IT systems supporting staff and students.</p>
+            </div>
+            <ul class="job-bullets">
+              <li>Managed IT infrastructure including servers, networking, and end-user devices</li>
+              <li>Provided 1st and 2nd line support across the organisation</li>
+              <li>Administered Active Directory, Group Policy, and Windows Server environments</li>
+              <li>Managed Microsoft Exchange and Office 365 services</li>
+              <li>Supported virtual environments (Hyper-V and VMware)</li>
+              <li>Deployed and managed iPads via MDM solutions</li>
+              <li>Maintained wireless networks, access control systems, and telephony</li>
+              <li>Oversaw backups, disaster recovery, and system health</li>
+              <li>Managed asset tracking, procurement, and budgeting</li>
+            </ul>
+          </div>
+        </div>
+
+      </div><!-- /timeline -->
+    </div>
+  </section>
+
+
+<!-- ============================================================
+     KEY HIGHLIGHTS
+============================================================ -->
+<section id="highlights">
+  <div class="wrapper">
+    <div class="section-label"><span class="section-num">02 /</span> Key Achievements</div>
+    <div class="highlights-grid">
+
+      <div class="highlight-card c1">
+        <div class="highlight-icon">🔐</div>
+        <h4>ISO 27001 & Cyber Essentials Plus</h4>
+        <p>Successfully led multiple certification renewals, significantly maturing security policies and controls — with external auditors recognising major improvements in governance and implementation.</p>
+      </div>
+
+      <div class="highlight-card c2">
+        <div class="highlight-icon">📈</div>
+        <h4>IT Function Transformation</h4>
+        <p>Took full ownership of IT operations within a high-growth organisation, evolving the function from reactive support to a structured, strategic service aligned with business objectives.</p>
+      </div>
+
+      <div class="highlight-card c3">
+        <div class="highlight-icon">☁️</div>
+        <h4>Cloud & Platform Modernisation</h4>
+        <p>Delivered large-scale cloud transformations including a full migration to Microsoft 365, modernising collaboration, security, and device management across the organisation.</p>
+      </div>
+
+      <div class="highlight-card c1">
+        <div class="highlight-icon">🛡️</div>
+        <h4>Security & Device Management</h4>
+        <p>Implemented enterprise-grade endpoint management and security using Intune and Jamf, standardising configurations, improving compliance, and reducing organisational risk.</p>
+      </div>
+
+      <div class="highlight-card c2">
+        <div class="highlight-icon">🧩</div>
+        <h4>Helpdesk & Service Delivery</h4>
+        <p>Introduced structured helpdesk systems with SLA tracking and user feedback, significantly improving support visibility, performance, and user experience.</p>
+      </div>
+
+      <div class="highlight-card c3">
+        <div class="highlight-icon">🏗️</div>
+        <h4>Infrastructure & Office Delivery</h4>
+        <p>Designed and delivered secure network infrastructure and AV systems for new office environments, ensuring scalability, reliability, and seamless user experience from day one.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+  <!-- ============================================================
+       ABOUT
+  ============================================================ -->
+  <section id="about">
+    <div class="wrapper">
+      <div class="section-label"><span class="section-num">03 /</span> Beyond the CV</div>
+      <div class="about-grid">
+
+        <div class="about-block">
+          <h3>The Human Behind the IT</h3>
+          <p>
+I take genuine pride in doing things properly — whether that’s delivering a seamless migration, building clear and usable documentation, or creating systems that just work without getting in people’s way.
+          </p>
+          <p>
+Based in Bristol, I bring a balance of strategic thinking and hands-on experience. Having worked across education, MSPs, and in-house roles, I’m comfortable adapting to different environments, leading through change, and making technology feel like an enabler rather than a blocker.
+          </p>
+          <p>
+At my core, I care about two things: building reliable, secure systems, and making life easier for the people who use them. The best IT, in my view, is the kind you don’t have to think about.
+          </p>
+          <p>Outside of the day-to-day, I still enjoy getting stuck into the technical detail when it counts — old habits die hard.</p>
+        </div>
+
+        <div class="about-block">
+          <div class="info-card">
+            <div class="info-icon">📻</div>
+            <div>
+              <h4>BBC Radio Bristol</h4>
+              <p>Featured as a guest IT expert on “Your Question Your Answer”, translating complex technology into clear, accessible advice for a wide audience.</p>
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-icon">🗄️</div>
+            <div>
+              <h4>Rack Perfectionist</h4>
+              <p>Known for turning chaotic server rooms into clean, structured, and fully documented environments. There’s a certain satisfaction in getting it exactly right.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       CONTACT
+  ============================================================ -->
+  <section id="contact">
+    <div class="wrapper">
+      <div class="section-label" style="justify-content:center; margin-bottom:28px;">
+        <span class="section-num">04 /</span> Get In Touch
+      </div>
+      <h2>Say Hello</h2>
+      <p>Always happy to connect with other professionals in the industry.</p>
+      <div class="contact-links">
+        <a href="mailto:harry@robey.cc" class="btn btn-primary">harry@robey.cc</a>
+        <a href="https://www.linkedin.com/in/harryrobey" target="_blank" rel="noopener" class="btn btn-ghost">LinkedIn ↗</a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrapper">
+      Harry Robey &middot; Bristol, UK &middot; <span>IT Manager</span>
+    </div>
+  </footer>
+
+
+  <!-- ============================================================
+       JAVASCRIPT
+  ============================================================ -->
+  <script>
+    // -------------------------------------------------------
+    // NETWORK SWITCHES
+    // Ports start dark — a port only lights when a lead is
+    // patched into it and the link comes up.
+    // -------------------------------------------------------
+    function buildPortGrid(containerId, count) {
+      const grid = document.getElementById(containerId);
+      if (!grid) return;
+      for (let i = 0; i < count; i++) {
+        const port = document.createElement('div');
+        port.className = 'port state-off';
+        const body = document.createElement('div');
+        body.className = 'port-body';
+        const led = document.createElement('div');
+        led.className = 'port-led';
+        body.appendChild(led);
+        port.appendChild(body);
+        grid.appendChild(port);
+      }
+    }
+    buildPortGrid('portGridCore', 28);
+    buildPortGrid('portGridAcc1', 12);
+    buildPortGrid('portGridAcc2', 12);
+
+    const totalPorts = document.querySelectorAll('.port').length;
+    function countActivePorts() {
+      return document.querySelectorAll('.port.state-active, .port.state-busy').length;
+    }
+
+    // Shared with the patch bay below — it keeps these numbers current
+    const patchStats = { total: 0, up: 0, loose: 0, faults: 0, loops: 0 };
+
+    function updateReadout() {
+      document.getElementById('readoutPorts').textContent = countActivePorts() + ' / ' + totalPorts;
+      const mb = (140 + patchStats.up * 160 + Math.random() * 420).toFixed(0);
+      document.getElementById('readoutThroughput').textContent = mb + ' Mbps';
+
+      const links = document.getElementById('readoutLinks');
+      if (links) {
+        links.textContent = patchStats.up + ' / ' + patchStats.total + ' up';
+        links.className = 'readout-val' + (patchStats.total && patchStats.up === patchStats.total ? ' green' : '');
+      }
+      const alerts = document.getElementById('readoutAlerts');
+      if (alerts) {
+        const n = patchStats.faults + patchStats.loops;
+        alerts.textContent = n === 0 ? '0 active' : n + ' active';
+        alerts.className = 'readout-val ' + (n === 0 ? 'green' : 'orange');
+      }
+    }
+
+    // Uptime counter (ticks every second)
+    let uptimeSeconds = 847 * 86400 + 14 * 3600 + 22 * 60;
+    function tickUptime() {
+      uptimeSeconds++;
+      const d = Math.floor(uptimeSeconds / 86400);
+      const h = Math.floor((uptimeSeconds % 86400) / 3600);
+      const m = Math.floor((uptimeSeconds % 3600) / 60);
+      const s = uptimeSeconds % 60;
+      document.getElementById('readoutUptime').textContent =
+        d + 'd ' + String(h).padStart(2,'0') + 'h ' + String(m).padStart(2,'0') + 'm ' + String(s).padStart(2,'0') + 's';
+    }
+    setInterval(tickUptime, 1000);
+
+
+    // -------------------------------------------------------
+    // PATCH BAY — the puzzle
+    //
+    // Six colour-coded leads (2 × Data, 2 × Voice, 2 × Management).
+    // A lead is "up" when both plugs sit in ports whose colour key
+    // matches the lead AND the run is core → access. Otherwise:
+    //   red blink   = VLAN mismatch
+    //   amber       = STP blocked (same switch, or access ↔ access)
+    //   cyan blink  = negotiating
+    // Either plug can be pulled. Rope physics on a canvas overlay;
+    // the DOM port LEDs show link state.
+    //
+    // To change the puzzle, edit VLAN_PORTS (which ports carry which
+    // colour key) and START (where each lead begins).
+    // -------------------------------------------------------
+    (function initPatchBay() {
+      const container = document.querySelector('.switch-container');
+      const canvas    = document.getElementById('patchCanvas');
+      const handles   = document.getElementById('plugHandles');
+      const readout   = document.querySelector('.network-readout');
+      const hint      = document.getElementById('patchHint');
+      const gCore = document.getElementById('portGridCore');
+      const gAcc1 = document.getElementById('portGridAcc1');
+      const gAcc2 = document.getElementById('portGridAcc2');
+      if (!container || !canvas || !handles || !gCore || !gAcc1 || !gAcc2) return;
+
+      const ctx = canvas.getContext('2d');
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const VLANS = {
+        cyan:   { colour: '#00e5ff', name: 'Data' },
+        green:  { colour: '#00ff88', name: 'Voice' },
+        orange: { colour: '#ff6b35', name: 'Management' }
+      };
+      const core = Array.from(gCore.querySelectorAll('.port'));
+      const acc1 = Array.from(gAcc1.querySelectorAll('.port'));
+      const acc2 = Array.from(gAcc2.querySelectorAll('.port'));
+      const allPorts = core.concat(acc1, acc2);
+      const switches = Array.from(container.querySelectorAll('.switch-unit'));
+
+      // Which ports carry a colour key (core has two of each, every floor has one of each)
+      const VLAN_PORTS = [
+        [core[15], 'cyan'], [core[17], 'green'], [core[19], 'orange'],
+        [core[22], 'cyan'], [core[24], 'green'], [core[26], 'orange'],
+        [acc1[0], 'cyan'],  [acc1[2], 'green'],  [acc1[4], 'orange'],
+        [acc2[1], 'orange'],[acc2[3], 'cyan'],   [acc2[5], 'green']
+      ];
+      VLAN_PORTS.forEach(([p, v]) => { p.dataset.vlan = v; p.title = VLANS[v].name + ' VLAN'; });
+
+      // Starting positions. Two correct, one mis-patched, three loose —
+      // and one loose lead is seated in an untagged core port on purpose.
+      const START = [
+        { vlan: 'cyan',   a: core[15], b: acc1[0] },
+        { vlan: 'green',  a: core[24], b: acc2[5] },
+        { vlan: 'orange', a: core[19], b: acc1[2] },
+        { vlan: 'green',  a: core[17], b: null },
+        { vlan: 'cyan',   a: core[20], b: null },
+        { vlan: 'orange', a: core[26], b: null }
+      ];
+
+      const SEGMENTS   = 18;
+      const GRAVITY    = 0.45;
+      const DAMPING    = 0.98;
+      const ITERATIONS = 6;
+      const SNAP       = 22;      // px — plug snaps to a port within this radius
+      const PLUG_IN    = 5;       // px below port centre where the cable pins
+      const PLUG_DX    = -4;      // px left of centre — keeps the port LED visible beside the plug
+      const SLACK      = 1.12;    // patched lead length = distance × SLACK
+
+      const cables = [];
+      let W = 0, H = 0, dpr = 1, floorY = 0, base = 200;
+      let lastW = -1, lastFloor = -1;
+      let drag = null;                 // { cable, end, pointerId, snap }
+      let hovered = null;
+      let visible = true;
+      const pointer = { x: 0, y: 0, t: 0 };
+
+      // ---------- geometry ----------
+      function rel(el) {
+        const r = el.getBoundingClientRect(), c = container.getBoundingClientRect();
+        return { x: r.left - c.left + r.width / 2, y: r.top - c.top + r.height / 2 };
+      }
+      function pinPoint(port) { const p = rel(port); return { x: p.x + PLUG_DX, y: p.y + PLUG_IN }; }
+      function switchOf(port) { return port.closest('.switch-unit'); }
+      function clamp(v, lo, hi) { return v < lo ? lo : v > hi ? hi : v; }
+      function endPoint(cable, end) { return end === 0 ? cable.pts[0] : cable.pts[cable.pts.length - 1]; }
+      function neighbour(cable, end) { return end === 0 ? cable.pts[1] : cable.pts[cable.pts.length - 2]; }
+
+      function setPort(el, cls, randomBlink) {
+        el.className = 'port ' + cls;
+        if (randomBlink) {
+          el.style.setProperty('--blink-speed', (0.6 + Math.random() * 1.6).toFixed(1) + 's');
+          el.style.setProperty('--blink-delay', '0s');
+        }
+      }
+
+      function nearestFreePort(x, y, radius, pool) {
+        let best = null, bd = radius;
+        (pool || allPorts).forEach(p => {
+          if (p.dataset.cabled) return;
+          const c = rel(p);
+          const d = Math.hypot(c.x - x, c.y - y);
+          if (d < bd) { bd = d; best = p; }
+        });
+        return best;
+      }
+
+      // ---------- cables ----------
+      function makeCable(i, def) {
+        const cable = {
+          id: i + 1, vlan: def.vlan, colour: VLANS[def.vlan].colour,
+          ends: [{ port: null, btn: null }, { port: null, btn: null }],
+          pts: [], rest: 0, restTarget: 0, state: 'loose', timer: null, seek: null
+        };
+        cable.ends[0].btn = makeHandle(cable, 0);
+        cable.ends[1].btn = makeHandle(cable, 1);
+        return cable;
+      }
+
+      function layoutCable(cable) {
+        const [e0, e1] = cable.ends;
+        let a, b;
+        if (e0.port) a = pinPoint(e0.port);
+        if (e1.port) b = pinPoint(e1.port);
+        if (a && b) {
+          cable.restTarget = Math.max(60, SLACK * Math.hypot(b.x - a.x, b.y - a.y));
+        } else if (a || b) {
+          const from = a || b;
+          const sway = reduceMotion ? 0 : (cable.id % 2 ? 30 : -30);
+          const hang = { x: clamp(from.x + sway, 8, W - 8), y: Math.min(from.y + base, floorY) };
+          if (a) b = hang; else a = hang;
+          cable.restTarget = base;
+        } else {
+          // Nothing plugged — lay it along the tray where it was
+          const x0 = cable.pts.length ? clamp(cable.pts[0].x, 20, W - 20) : 40;
+          a = { x: x0, y: floorY }; b = { x: clamp(x0 + 60, 20, W - 20), y: floorY };
+          cable.restTarget = base;
+        }
+        cable.rest = cable.restTarget;
+        cable.pts = [];
+        for (let i = 0; i <= SEGMENTS; i++) {
+          const t = i / SEGMENTS;
+          const x = a.x + (b.x - a.x) * t, y = a.y + (b.y - a.y) * t;
+          cable.pts.push({ x, y, ox: x, oy: y, pinned: (i === 0 && !!e0.port) || (i === SEGMENTS && !!e1.port) });
+        }
+      }
+
+      function attachEnd(cable, end, port, instant) {
+        port.dataset.cabled = '1';
+        cable.ends[end].port = port;
+        cable.seek = null;
+        const p = endPoint(cable, end), pin = pinPoint(port);
+        p.pinned = true;
+        p.x = p.ox = pin.x; p.y = p.oy = pin.y;
+        const other = cable.ends[1 - end].port;
+        if (other) {
+          const q = pinPoint(other);
+          cable.restTarget = Math.max(60, SLACK * Math.hypot(pin.x - q.x, pin.y - q.y));
+        }
+        evaluate(cable, instant);
+      }
+
+      function detachEnd(cable, end) {
+        const port = cable.ends[end].port;
+        if (port) { delete port.dataset.cabled; setPort(port, 'state-off'); }
+        cable.ends[end].port = null;
+        cable.seek = null;
+        endPoint(cable, end).pinned = false;
+        cable.restTarget = base;
+        evaluate(cable, true);
+      }
+
+      // Decide what the link does now that the plugs are where they are
+      function evaluate(cable, instant) {
+        clearTimeout(cable.timer);
+        const [e0, e1] = cable.ends;
+        if (!e0.port || !e1.port) {
+          cable.state = 'loose';
+          if (e0.port) setPort(e0.port, 'state-off');
+          if (e1.port) setPort(e1.port, 'state-off');
+          refresh();
+          return;
+        }
+        const s0 = switchOf(e0.port), s1 = switchOf(e1.port);
+        const roles = [s0.dataset.switch, s1.dataset.switch];
+        let result;
+        if (s0 === s1 || !(roles.includes('core') && roles.includes('access'))) result = 'blocked';
+        else if (e0.port.dataset.vlan !== cable.vlan || e1.port.dataset.vlan !== cable.vlan) result = 'fault';
+        else result = 'up';
+
+        const finish = () => {
+          if (cable.ends[0].port !== e0.port || cable.ends[1].port !== e1.port) return;
+          cable.state = result;
+          const cls = result === 'up' ? 'state-active' : result === 'fault' ? 'state-fault' : 'state-uplink';
+          setPort(e0.port, cls, result === 'up');
+          setPort(e1.port, cls, result === 'up');
+          refresh();
+        };
+        if (instant) { finish(); return; }
+        cable.state = 'negotiating';
+        setPort(e0.port, 'state-busy'); setPort(e1.port, 'state-busy');
+        cable.timer = setTimeout(finish, 800 + Math.random() * 500);
+        refresh();
+      }
+
+      // ---------- stats / copy ----------
+      function refresh() {
+        patchStats.total  = cables.length;
+        patchStats.up     = cables.filter(c => c.state === 'up').length;
+        patchStats.loose  = cables.filter(c => c.state !== 'up').length;
+        patchStats.faults = cables.filter(c => c.state === 'fault').length;
+        patchStats.loops  = cables.filter(c => c.state === 'blocked').length;
+        updateReadout();
+        updateHint();
+        cables.forEach(c => { labelHandle(c, 0); labelHandle(c, 1); });
+        container.classList.toggle('is-complete', patchStats.up === patchStats.total);
+      }
+
+      function updateHint() {
+        if (!hint) return;
+        const s = patchStats;
+        let text, cls = '';
+        if (s.loops) {
+          text = 'Blocked by spanning tree — uplinks run from the core to an access switch.'; cls = 'is-warn';
+        } else if (s.faults) {
+          text = s.faults + ' VLAN mismatch' + (s.faults > 1 ? 'es' : '') + ' — check the colour key under the jack at both ends.'; cls = 'is-warn';
+        } else if (s.loose) {
+          text = s.loose + ' uplink' + (s.loose > 1 ? 's' : '') + ' to patch — each floor needs Data, Voice and Management.';
+        } else {
+          text = 'Site patched to standard. Rack perfectionist approved.'; cls = 'is-ok';
+        }
+        hint.textContent = text;
+        hint.className = 'patch-hint ' + cls;
+      }
+
+      function labelHandle(cable, end) {
+        const e = cable.ends[end];
+        const who = VLANS[cable.vlan].name + ' lead ' + cable.id + ', plug ' + (end ? 'B' : 'A') + ': ';
+        let s;
+        if (!e.port) s = 'unplugged. Enter seats it in the nearest free port.';
+        else {
+          const sw = switchOf(e.port).dataset.name;
+          const idx = Array.from(e.port.parentNode.children).indexOf(e.port) + 1;
+          const st = { up: 'link up', fault: 'VLAN mismatch', blocked: 'blocked by STP', negotiating: 'negotiating', loose: 'no link' }[cable.state] || cable.state;
+          s = 'in ' + sw + ' port ' + idx + ', ' + st + '. Enter unplugs; arrow keys move it.';
+        }
+        e.btn.setAttribute('aria-label', who + s);
+      }
+
+      // ---------- plug handles: real buttons riding on each plug ----------
+      function makeHandle(cable, end) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'plug-handle';
+        btn.addEventListener('pointerdown', e => onDown(e, cable, end));
+        btn.addEventListener('pointermove', onMove);
+        btn.addEventListener('pointerup', onUp);
+        btn.addEventListener('pointercancel', onUp);
+        btn.addEventListener('pointerenter', () => { hovered = cable; });
+        btn.addEventListener('pointerleave', () => { if (hovered === cable) hovered = null; });
+        btn.addEventListener('keydown', e => onKey(e, cable, end));
+        handles.appendChild(btn);
+        return btn;
+      }
+
+      function onKey(e, cable, end) {
+        const ep = cable.ends[end];
+        const p = endPoint(cable, end);
+        let target = null;
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          if (ep.port) { detachEnd(cable, end); return; }
+          target = nearestFreePort(p.x, p.y, Infinity);
+        } else if (ep.port && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+          e.preventDefault();
+          // Next free port on the same switch
+          const ports = Array.from(switchOf(ep.port).querySelectorAll('.port'));
+          let i = ports.indexOf(ep.port);
+          for (let k = 0; k < ports.length; k++) {
+            i = (i + (e.key === 'ArrowRight' ? 1 : -1) + ports.length) % ports.length;
+            if (!ports[i].dataset.cabled) { target = ports[i]; break; }
+          }
+        } else if (ep.port && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
+          e.preventDefault();
+          // Closest free port on the next switch up / down the stack
+          const cur = switchOf(ep.port);
+          const order = switches.slice().sort((a, b) => a.offsetTop - b.offsetTop || a.offsetLeft - b.offsetLeft);
+          const i = order.indexOf(cur);
+          const next = order[(i + (e.key === 'ArrowDown' ? 1 : -1) + order.length) % order.length];
+          target = nearestFreePort(p.x, p.y, Infinity, Array.from(next.querySelectorAll('.port')));
+        }
+        if (!target) return;
+        if (ep.port) detachEnd(cable, end);
+        target.dataset.cabled = '1';          // reserve it while the plug travels
+        cable.seek = { end, port: target };
+        p.pinned = true;
+      }
+
+      function toLocal(e) {
+        const c = container.getBoundingClientRect();
+        return { x: e.clientX - c.left, y: e.clientY - c.top };
+      }
+
+      function onDown(e, cable, end) {
+        if (e.button !== 0) return;
+        e.preventDefault();
+        const btn = cable.ends[end].btn;
+        btn.setPointerCapture(e.pointerId);
+        btn.classList.add('dragging');
+        if (cable.seek) { delete cable.seek.port.dataset.cabled; cable.seek = null; }
+        if (cable.ends[end].port) detachEnd(cable, end);
+        const p = endPoint(cable, end), pt = toLocal(e);
+        p.pinned = true;
+        p.ox = p.x = pt.x; p.oy = p.y = pt.y;
+        drag = { cable, end, pointerId: e.pointerId, snap: null };
+        updateDragTarget(pt);
+      }
+
+      function onMove(e) {
+        if (!drag || drag.pointerId !== e.pointerId) return;
+        const p = endPoint(drag.cable, drag.end), pt = toLocal(e);
+        p.ox = p.x; p.oy = p.y;
+        p.x = clamp(pt.x, -10, W + 10);
+        p.y = clamp(pt.y, -10, H + 10);
+        updateDragTarget(pt);
+      }
+
+      function updateDragTarget(pt) {
+        drag.snap = nearestFreePort(pt.x, pt.y, SNAP);
+        // If the far end is seated, let the lead pay out so it never fights the pointer
+        const other = drag.cable.ends[1 - drag.end].port;
+        if (other) {
+          const q = pinPoint(other);
+          drag.cable.restTarget = Math.max(base, 1.05 * Math.hypot(pt.x - q.x, pt.y - q.y));
+        }
+      }
+
+      function onUp(e) {
+        if (!drag || drag.pointerId !== e.pointerId) return;
+        const { cable, end, snap } = drag;
+        cable.ends[end].btn.classList.remove('dragging');
+        drag = null;
+        if (snap) { attachEnd(cable, end, snap, false); return; }
+        const p = endPoint(cable, end);
+        p.ox = p.x - clamp(p.x - p.ox, -6, 6);   // keep a little of the throw, not a fling
+        p.oy = p.y - clamp(p.y - p.oy, -6, 6);
+        p.pinned = false;
+        cable.restTarget = base;
+        refresh();
+      }
+
+      // Brushing the cursor past a loose lead nudges it
+      container.addEventListener('pointermove', e => {
+        const p = toLocal(e), now = performance.now();
+        const dt = Math.max(1, now - pointer.t);
+        const vx = clamp((p.x - pointer.x) / dt * 16, -8, 8);
+        const vy = clamp((p.y - pointer.y) / dt * 16, -8, 8);
+        pointer.x = p.x; pointer.y = p.y; pointer.t = now;
+        if (drag || reduceMotion) return;
+        cables.forEach(c => c.pts.forEach(q => {
+          if (q.pinned) return;
+          if (Math.abs(q.x - p.x) < 14 && Math.abs(q.y - p.y) < 14) { q.ox -= vx * 0.3; q.oy -= vy * 0.3; }
+        }));
+      });
+
+      // Scrolling the page gives loose leads a little sway
+      let lastScroll = window.scrollY;
+      window.addEventListener('scroll', () => {
+        const d = clamp(window.scrollY - lastScroll, -40, 40);
+        lastScroll = window.scrollY;
+        if (reduceMotion || !visible) return;
+        cables.forEach(c => c.pts.forEach(q => { if (!q.pinned) q.oy += d * 0.06; }));
+      }, { passive: true });
+
+      // ---------- physics ----------
+      function step(cable) {
+        const pts = cable.pts, n = pts.length;
+
+        if (cable.seek) {                          // keyboard glide into a port
+          const p = endPoint(cable, cable.seek.end), pin = pinPoint(cable.seek.port);
+          p.x += (pin.x - p.x) * 0.18; p.y += (pin.y - p.y) * 0.18;
+          p.ox = p.x; p.oy = p.y;
+          if (Math.hypot(pin.x - p.x, pin.y - p.y) < 1.5) attachEnd(cable, cable.seek.end, cable.seek.port, false);
+        }
+
+        for (let i = 0; i < n; i++) {
+          const p = pts[i];
+          if (p.pinned) continue;
+          const vx = (p.x - p.ox) * DAMPING, vy = (p.y - p.oy) * DAMPING;
+          p.ox = p.x; p.oy = p.y;
+          p.x += vx; p.y += vy + GRAVITY;
+        }
+
+        cable.rest += (cable.restTarget - cable.rest) * 0.12;
+        const seg = cable.rest / SEGMENTS;
+
+        for (let k = 0; k < ITERATIONS; k++) {
+          for (let i = 0; i < n - 1; i++) {
+            const a = pts[i], b = pts[i + 1];
+            const dx = b.x - a.x, dy = b.y - a.y;
+            const d = Math.hypot(dx, dy) || 0.0001;
+            const diff = (d - seg) / d;
+            if (a.pinned && b.pinned) continue;
+            if (a.pinned)      { b.x -= dx * diff; b.y -= dy * diff; }
+            else if (b.pinned) { a.x += dx * diff; a.y += dy * diff; }
+            else { a.x += dx * diff * 0.5; a.y += dy * diff * 0.5; b.x -= dx * diff * 0.5; b.y -= dy * diff * 0.5; }
+          }
+          for (let i = 0; i < n; i++) {
+            const p = pts[i];
+            if (p.pinned) continue;
+            if (p.y > floorY) { p.y = floorY; p.ox += (p.x - p.ox) * 0.5; }   // rack tray, with friction
+            if (p.y < 2) p.y = 2;
+            if (p.x < 4) p.x = 4; else if (p.x > W - 4) p.x = W - 4;
+          }
+        }
+      }
+
+      // ---------- drawing ----------
+      function roundRect(x, y, w, h, r) {
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.arcTo(x + w, y, x + w, y + h, r);
+        ctx.arcTo(x + w, y + h, x, y + h, r);
+        ctx.arcTo(x, y + h, x, y, r);
+        ctx.arcTo(x, y, x + w, y, r);
+        ctx.closePath();
+      }
+
+      // RJ45 plug: `end` is the cable tip, `prev` the point behind it
+      function drawPlug(end, prev, colour, vertical, live) {
+        ctx.save();
+        ctx.translate(end.x, end.y);
+        ctx.rotate(vertical ? -Math.PI / 2 : Math.atan2(end.y - prev.y, end.x - prev.x));
+        ctx.fillStyle = colour; ctx.globalAlpha = 0.9;
+        roundRect(-6, -2.8, 5, 5.6, 1.5); ctx.fill();               // boot
+        ctx.globalAlpha = 1;
+        roundRect(-2, -4.5, 10, 9, 1.5);                            // body
+        ctx.fillStyle = '#0c131a'; ctx.fill();
+        ctx.lineWidth = 1.2; ctx.strokeStyle = live ? colour : 'rgba(139,170,187,0.55)'; ctx.stroke();
+        ctx.fillStyle = 'rgba(139,170,187,0.5)';
+        ctx.fillRect(1, -6.3, 5, 1.6);                              // latch
+        ctx.fillStyle = 'rgba(255,214,110,0.55)';
+        for (let i = 0; i < 4; i++) ctx.fillRect(5.8, -3.2 + i * 1.8, 2, 0.9);   // contacts
+        ctx.restore();
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+
+        for (const cable of cables) {
+          const pts = cable.pts, n = pts.length;
+          ctx.beginPath();
+          ctx.moveTo(pts[0].x, pts[0].y);
+          for (let i = 1; i < n - 1; i++) {
+            ctx.quadraticCurveTo(pts[i].x, pts[i].y, (pts[i].x + pts[i + 1].x) / 2, (pts[i].y + pts[i + 1].y) / 2);
+          }
+          ctx.lineTo(pts[n - 1].x, pts[n - 1].y);
+
+          const hot = hovered === cable || (drag && drag.cable === cable);
+          ctx.strokeStyle = 'rgba(0,0,0,0.55)'; ctx.lineWidth = 6.5; ctx.stroke();
+          if (hot) { ctx.shadowColor = cable.colour; ctx.shadowBlur = 10; }
+          ctx.strokeStyle = cable.colour; ctx.lineWidth = 3.4; ctx.stroke();
+          ctx.shadowBlur = 0;
+          ctx.strokeStyle = 'rgba(255,255,255,0.22)'; ctx.lineWidth = 1; ctx.stroke();
+
+          const live = cable.state === 'up';
+          drawPlug(pts[0], pts[1], cable.colour, !!cable.ends[0].port, live);
+          drawPlug(pts[n - 1], pts[n - 2], cable.colour, !!cable.ends[1].port, live);
+        }
+
+        if (drag && drag.snap) {
+          const c = rel(drag.snap);
+          ctx.beginPath();
+          ctx.arc(c.x, c.y, 13, 0, Math.PI * 2);
+          ctx.strokeStyle = drag.cable.colour; ctx.lineWidth = 1.5;
+          ctx.setLineDash([3, 3]); ctx.stroke(); ctx.setLineDash([]);
+        }
+      }
+
+      function placeHandles() {
+        for (const cable of cables) {
+          for (let end = 0; end < 2; end++) {
+            const p = endPoint(cable, end);
+            cable.ends[end].btn.style.transform = 'translate(' + (p.x - 14).toFixed(1) + 'px,' + (p.y - 14).toFixed(1) + 'px)';
+          }
+        }
+      }
+
+      // ---------- layout / lifecycle ----------
+      function layout() {
+        W = container.clientWidth; H = container.clientHeight;
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        floorY = readout ? readout.offsetTop - 4 : H - 10;
+        // A loose lead reaches from the core's bottom row to the tray, plus a little to lie on it
+        const coreBottom = gCore.getBoundingClientRect().bottom - container.getBoundingClientRect().top;
+        base = Math.max(120, (floorY - coreBottom) * 1.1 + 50);
+        if (W !== lastW || Math.abs(floorY - lastFloor) > 1) {
+          lastW = W; lastFloor = floorY;
+          cables.forEach(layoutCable);
+        }
+      }
+
+      function init() {
+        START.forEach((def, i) => cables.push(makeCable(i, def)));
+        layout();
+        START.forEach((def, i) => {
+          if (def.a && !def.a.dataset.cabled) attachEnd(cables[i], 0, def.a, true);
+          if (def.b && !def.b.dataset.cabled) attachEnd(cables[i], 1, def.b, true);
+        });
+        lastW = -1; layout();      // now the ends are seated, lay the ropes between them
+        refresh();
+      }
+
+      // Rules panel
+      const infoBtn = document.getElementById('patchInfoBtn');
+      const info    = document.getElementById('patchInfo');
+      const infoClose = document.getElementById('patchInfoClose');
+      function setInfo(open) {
+        if (!info || !infoBtn) return;
+        info.hidden = !open;
+        infoBtn.setAttribute('aria-expanded', String(open));
+        if (open) info.focus();
+      }
+      if (infoBtn) infoBtn.addEventListener('click', () => setInfo(info.hidden));
+      if (infoClose) infoClose.addEventListener('click', () => { setInfo(false); infoBtn.focus(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && info && !info.hidden) setInfo(false); });
+
+      let prev = performance.now(), acc = 0;
+      function frame(now) {
+        requestAnimationFrame(frame);
+        if (!visible || document.hidden || W === 0) { prev = now; return; }
+        acc += Math.min(now - prev, 50); prev = now;
+        while (acc >= 16.6) { cables.forEach(step); acc -= 16.6; }
+        draw(); placeHandles();
+      }
+
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(es => { visible = es[0].isIntersecting; }).observe(container);
+      }
+      let rafLayout = 0;
+      const requestLayout = () => { cancelAnimationFrame(rafLayout); rafLayout = requestAnimationFrame(layout); };
+      if ('ResizeObserver' in window) new ResizeObserver(requestLayout).observe(container);
+      window.addEventListener('resize', requestLayout);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(requestLayout);
+
+      init();
+      requestAnimationFrame(frame);
+    })();
+
+    updateReadout();
+    setInterval(updateReadout, 1400);
+
+
+    // -------------------------------------------------------
+    // TYPING EFFECT (hero title)
+    // -------------------------------------------------------
+const titles = [
+  'IT Leader & Technology Strategist',
+  'Cyber Security & Risk Lead',
+  'IT Operations & Service Delivery',
+  'Cloud, Infrastructure & Endpoint Management',
+  'Driving Scalable & Secure IT Environments'
+];
+    let titleIdx = 0, charIdx = 0, deleting = false;
+    const typedEl = document.getElementById('typed-title');
+
+    function typeLoop() {
+      const current = titles[titleIdx];
+      if (!deleting) {
+        typedEl.textContent = current.slice(0, charIdx + 1);
+        charIdx++;
+        if (charIdx === current.length) {
+          deleting = true;
+          setTimeout(typeLoop, 2400);
+          return;
+        }
+      } else {
+        typedEl.textContent = current.slice(0, charIdx - 1);
+        charIdx--;
+        if (charIdx === 0) {
+          deleting = false;
+          titleIdx = (titleIdx + 1) % titles.length;
+        }
+      }
+      setTimeout(typeLoop, deleting ? 38 : 68);
+    }
+    setTimeout(typeLoop, 1600);
+
+
+    // -------------------------------------------------------
+    // SCROLL ANIMATIONS (jobs & highlight cards)
+    // -------------------------------------------------------
+    const fadeEls = document.querySelectorAll('.job, .highlight-card');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 70);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    fadeEls.forEach(el => observer.observe(el));
+
+
+    // -------------------------------------------------------
+    // MOBILE NAV TOGGLE
+    // -------------------------------------------------------
+    const navToggle = document.getElementById('navToggle');
+    const navLinks  = document.querySelector('.nav-links');
+    if (navToggle && navLinks) {
+      navToggle.addEventListener('click', () => {
+        const open = navLinks.style.display === 'flex';
+        navLinks.style.display = open ? 'none' : 'flex';
+        navLinks.style.position = 'absolute';
+        navLinks.style.top = '56px';
+        navLinks.style.left = '0'; navLinks.style.right = '0';
+        navLinks.style.flexDirection = 'column';
+        navLinks.style.gap = '0';
+        navLinks.style.background = 'rgba(8,12,16,0.97)';
+        navLinks.style.borderBottom = '1px solid #1e2d3d';
+        navLinks.style.padding = '12px 24px 16px';
+      });
+    }
+  </script>
+
+</body>
+</html>
