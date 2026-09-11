@@ -93,49 +93,60 @@ An experienced IT leader specialising in the design, delivery, and governance of
 </div>
         </div><!-- /hero-text -->
 
-        <!-- Right: Animated Network Switch -->
+        <!-- Right: Interactive patch bay -->
         <div class="hero-visual">
           <div class="switch-container">
 
-            <!-- Switch Unit 1: Core switch -->
-            <div class="switch-unit">
+            <!-- Patch-cable physics layer (drawn over the switches by JS).
+                 Rules of the game live in the info panel at the bottom. -->
+            <canvas class="patch-canvas" id="patchCanvas" aria-hidden="true"></canvas>
+            <div class="plug-handles" id="plugHandles"></div>
+
+            <!-- Core switch -->
+            <div class="switch-unit" data-switch="core" data-name="BRS-CORE-SW01">
               <div class="switch-header">
-                <span class="switch-brand">Core-SW-01</span>
+                <span class="switch-brand">BRS-CORE-SW01</span>
                 <div class="switch-status-leds">
                   <div class="status-led pwr"  title="Power"></div>
                   <div class="status-led sys"  title="System"></div>
                   <div class="status-led warn" title="Alert — none"></div>
                 </div>
               </div>
-
-              <!-- 24-port patch panel -->
-              <div class="port-grid" id="portGrid1">
-                <!-- Ports injected by JS -->
-              </div>
-
-              <!-- SFP uplinks -->
+              <div class="port-grid" id="portGridCore" style="--cols: 14;"></div>
               <div class="sfp-row">
-                <div class="sfp-port sfp-active"><div class="port-led"></div></div>
-                <div class="sfp-port sfp-active"><div class="port-led"></div></div>
+                <div class="sfp-port sfp-active" title="Uplink — firewall A"><div class="port-led"></div></div>
+                <div class="sfp-port sfp-active" title="Uplink — firewall B"><div class="port-led"></div></div>
                 <div class="sfp-port"><div class="port-led"></div></div>
                 <div class="sfp-port"><div class="port-led"></div></div>
               </div>
-
-              <div class="switch-label">48-Port Gigabit Managed Switch — Bristol DC-01</div>
+              <div class="switch-label">28-Port L3 Core — Bristol DC-01 · Rack A1</div>
             </div>
 
-            <!-- Switch Unit 2: Access switch -->
-            <div class="switch-unit">
-              <div class="switch-header">
-                <span class="switch-brand">Access-SW-02</span>
-                <div class="switch-status-leds">
-                  <div class="status-led pwr" title="Power"></div>
-                  <div class="status-led sys" title="System"></div>
-                  <div class="status-led warn" title="Alert — none"></div>
+            <!-- Access switches, one per floor -->
+            <div class="access-row">
+              <div class="switch-unit" data-switch="access" data-name="BRS-ACC-SW01">
+                <div class="switch-header">
+                  <span class="switch-brand">BRS-ACC-SW01</span>
+                  <div class="switch-status-leds">
+                    <div class="status-led pwr" title="Power"></div>
+                    <div class="status-led sys" title="System"></div>
+                  </div>
                 </div>
+                <div class="port-grid" id="portGridAcc1" style="--cols: 6;"></div>
+                <div class="switch-label">12-Port PoE+ — Floor 1</div>
               </div>
-              <div class="port-grid" id="portGrid2"></div>
-              <div class="switch-label">24-Port PoE+ Access Switch — Floor 1</div>
+
+              <div class="switch-unit" data-switch="access" data-name="BRS-ACC-SW02">
+                <div class="switch-header">
+                  <span class="switch-brand">BRS-ACC-SW02</span>
+                  <div class="switch-status-leds">
+                    <div class="status-led pwr" title="Power"></div>
+                    <div class="status-led sys" title="System"></div>
+                  </div>
+                </div>
+                <div class="port-grid" id="portGridAcc2" style="--cols: 6;"></div>
+                <div class="switch-label">12-Port PoE+ — Floor 2</div>
+              </div>
             </div>
 
             <!-- Live network readout -->
@@ -153,9 +164,40 @@ An experienced IT leader specialising in the design, delivery, and governance of
                 <span class="readout-val" id="readoutThroughput">—</span>
               </div>
               <div class="readout-line">
-                <span class="readout-key">alerts</span>
-                <span class="readout-val green">0 active</span>
+                <span class="readout-key">uplinks</span>
+                <span class="readout-val" id="readoutLinks">—</span>
               </div>
+              <div class="readout-line">
+                <span class="readout-key">alerts</span>
+                <span class="readout-val green" id="readoutAlerts">0 active</span>
+              </div>
+            </div>
+
+            <!-- Status line + rules toggle (text set by JS) -->
+            <div class="patch-hint-row">
+              <div class="patch-hint" id="patchHint" aria-live="polite"></div>
+              <button type="button" class="patch-info-btn" id="patchInfoBtn"
+                      aria-expanded="false" aria-controls="patchInfo" title="Patching standard">i</button>
+            </div>
+
+            <!-- Rules panel -->
+            <div class="patch-info" id="patchInfo" tabindex="-1" hidden>
+              <div class="patch-info-head">
+                <span>Patching standard — BRS-DC01</span>
+                <button type="button" class="patch-info-close" id="patchInfoClose" aria-label="Close">×</button>
+              </div>
+              <ol class="patch-rules">
+                <li>Every lead carries one VLAN, shown by its colour. It has to land in a port with the matching colour key under the jack — at both ends.
+                  <span class="vlan-key">
+                    <span class="vlan-dot" style="--c: var(--accent);"></span>Data
+                    <span class="vlan-dot" style="--c: var(--accent2);"></span>Voice
+                    <span class="vlan-dot" style="--c: var(--accent3);"></span>Management
+                  </span>
+                </li>
+                <li>Uplinks run from the core to an access switch. Both ends on one switch, or access to access, gets blocked by spanning tree.</li>
+                <li>Link lights: <em class="led-green">green</em> up · <em class="led-red">red</em> VLAN mismatch · <em class="led-amber">amber</em> STP blocked · <em class="led-cyan">cyan</em> negotiating.</li>
+              </ol>
+              <p class="patch-goal">Goal: both floors patched — six uplinks, all green. Drag either plug. Tab to a plug and use Enter or the arrow keys if you'd rather not drag.</p>
             </div>
 
           </div><!-- /switch-container -->
@@ -515,7 +557,7 @@ Based in Bristol, I bring a balance of strategic thinking and hands-on experienc
           <p>
 At my core, I care about two things: building reliable, secure systems, and making life easier for the people who use them. The best IT, in my view, is the kind you don’t have to think about.
           </p>
-                    <p></p>Outside of the day-to-day, I still enjoy getting stuck into the technical detail when it counts — old habits die hard.</p>
+          <p>Outside of the day-to-day, I still enjoy getting stuck into the technical detail when it counts — old habits die hard.</p>
         </div>
 
         <div class="about-block">
@@ -571,68 +613,54 @@ At my core, I care about two things: building reliable, secure systems, and maki
   ============================================================ -->
   <script>
     // -------------------------------------------------------
-    // NETWORK SWITCH ANIMATION
+    // NETWORK SWITCHES
+    // Ports start dark — a port only lights when a lead is
+    // patched into it and the link comes up.
     // -------------------------------------------------------
     function buildPortGrid(containerId, count) {
       const grid = document.getElementById(containerId);
       if (!grid) return;
-      const states = ['state-active', 'state-active', 'state-active', 'state-busy', 'state-off'];
       for (let i = 0; i < count; i++) {
         const port = document.createElement('div');
-        port.className = 'port';
+        port.className = 'port state-off';
         const body = document.createElement('div');
         body.className = 'port-body';
         const led = document.createElement('div');
         led.className = 'port-led';
         body.appendChild(led);
         port.appendChild(body);
-        // Random initial state weighted toward active
-        const s = states[Math.floor(Math.random() * states.length)];
-        port.classList.add(s);
-        // Random blink speed for active ports
-        const speed = (0.6 + Math.random() * 2).toFixed(1) + 's';
-        const delay = (Math.random() * 1.5).toFixed(2) + 's';
-        port.style.setProperty('--blink-speed', speed);
-        port.style.setProperty('--blink-delay', delay);
         grid.appendChild(port);
       }
     }
+    buildPortGrid('portGridCore', 28);
+    buildPortGrid('portGridAcc1', 12);
+    buildPortGrid('portGridAcc2', 12);
 
-    buildPortGrid('portGrid1', 48);
-    buildPortGrid('portGrid2', 24);
-
-    // Randomly flip port states every ~800ms
-    function randomisePort(gridId) {
-      const grid = document.getElementById(gridId);
-      if (!grid) return;
-      const ports = grid.querySelectorAll('.port');
-      const states = ['state-active', 'state-active', 'state-busy', 'state-off'];
-      const idx = Math.floor(Math.random() * ports.length);
-      const port = ports[idx];
-      port.className = 'port';
-      const ns = states[Math.floor(Math.random() * states.length)];
-      port.classList.add(ns);
-      port.style.setProperty('--blink-speed', (0.5 + Math.random() * 2).toFixed(1) + 's');
-      port.style.setProperty('--blink-delay', '0s');
+    const totalPorts = document.querySelectorAll('.port').length;
+    function countActivePorts() {
+      return document.querySelectorAll('.port.state-active, .port.state-busy').length;
     }
 
-    setInterval(() => { randomisePort('portGrid1'); randomisePort('portGrid2'); }, 700);
-
-    // Update live readout
-    function countActivePorts(gridId) {
-      const grid = document.getElementById(gridId);
-      if (!grid) return 0;
-      return grid.querySelectorAll('.port.state-active, .port.state-busy').length;
-    }
+    // Shared with the patch bay below — it keeps these numbers current
+    const patchStats = { total: 0, up: 0, loose: 0, faults: 0, loops: 0 };
 
     function updateReadout() {
-      const total = countActivePorts('portGrid1') + countActivePorts('portGrid2');
-      document.getElementById('readoutPorts').textContent = total + ' / 72';
-      const mb = (180 + Math.random() * 640).toFixed(0);
+      document.getElementById('readoutPorts').textContent = countActivePorts() + ' / ' + totalPorts;
+      const mb = (140 + patchStats.up * 160 + Math.random() * 420).toFixed(0);
       document.getElementById('readoutThroughput').textContent = mb + ' Mbps';
+
+      const links = document.getElementById('readoutLinks');
+      if (links) {
+        links.textContent = patchStats.up + ' / ' + patchStats.total + ' up';
+        links.className = 'readout-val' + (patchStats.total && patchStats.up === patchStats.total ? ' green' : '');
+      }
+      const alerts = document.getElementById('readoutAlerts');
+      if (alerts) {
+        const n = patchStats.faults + patchStats.loops;
+        alerts.textContent = n === 0 ? '0 active' : n + ' active';
+        alerts.className = 'readout-val ' + (n === 0 ? 'green' : 'orange');
+      }
     }
-    updateReadout();
-    setInterval(updateReadout, 1400);
 
     // Uptime counter (ticks every second)
     let uptimeSeconds = 847 * 86400 + 14 * 3600 + 22 * 60;
@@ -646,6 +674,562 @@ At my core, I care about two things: building reliable, secure systems, and maki
         d + 'd ' + String(h).padStart(2,'0') + 'h ' + String(m).padStart(2,'0') + 'm ' + String(s).padStart(2,'0') + 's';
     }
     setInterval(tickUptime, 1000);
+
+
+    // -------------------------------------------------------
+    // PATCH BAY — the puzzle
+    //
+    // Six colour-coded leads (2 × Data, 2 × Voice, 2 × Management).
+    // A lead is "up" when both plugs sit in ports whose colour key
+    // matches the lead AND the run is core → access. Otherwise:
+    //   red blink   = VLAN mismatch
+    //   amber       = STP blocked (same switch, or access ↔ access)
+    //   cyan blink  = negotiating
+    // Either plug can be pulled. Rope physics on a canvas overlay;
+    // the DOM port LEDs show link state.
+    //
+    // To change the puzzle, edit VLAN_PORTS (which ports carry which
+    // colour key) and START (where each lead begins).
+    // -------------------------------------------------------
+    (function initPatchBay() {
+      const container = document.querySelector('.switch-container');
+      const canvas    = document.getElementById('patchCanvas');
+      const handles   = document.getElementById('plugHandles');
+      const readout   = document.querySelector('.network-readout');
+      const hint      = document.getElementById('patchHint');
+      const gCore = document.getElementById('portGridCore');
+      const gAcc1 = document.getElementById('portGridAcc1');
+      const gAcc2 = document.getElementById('portGridAcc2');
+      if (!container || !canvas || !handles || !gCore || !gAcc1 || !gAcc2) return;
+
+      const ctx = canvas.getContext('2d');
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const VLANS = {
+        cyan:   { colour: '#00e5ff', name: 'Data' },
+        green:  { colour: '#00ff88', name: 'Voice' },
+        orange: { colour: '#ff6b35', name: 'Management' }
+      };
+      const core = Array.from(gCore.querySelectorAll('.port'));
+      const acc1 = Array.from(gAcc1.querySelectorAll('.port'));
+      const acc2 = Array.from(gAcc2.querySelectorAll('.port'));
+      const allPorts = core.concat(acc1, acc2);
+      const switches = Array.from(container.querySelectorAll('.switch-unit'));
+
+      // Which ports carry a colour key (core has two of each, every floor has one of each)
+      const VLAN_PORTS = [
+        [core[15], 'cyan'], [core[17], 'green'], [core[19], 'orange'],
+        [core[22], 'cyan'], [core[24], 'green'], [core[26], 'orange'],
+        [acc1[0], 'cyan'],  [acc1[2], 'green'],  [acc1[4], 'orange'],
+        [acc2[1], 'orange'],[acc2[3], 'cyan'],   [acc2[5], 'green']
+      ];
+      VLAN_PORTS.forEach(([p, v]) => { p.dataset.vlan = v; p.title = VLANS[v].name + ' VLAN'; });
+
+      // Starting positions. Two correct, one mis-patched, three loose —
+      // and one loose lead is seated in an untagged core port on purpose.
+      const START = [
+        { vlan: 'cyan',   a: core[15], b: acc1[0] },
+        { vlan: 'green',  a: core[24], b: acc2[5] },
+        { vlan: 'orange', a: core[19], b: acc1[2] },
+        { vlan: 'green',  a: core[17], b: null },
+        { vlan: 'cyan',   a: core[20], b: null },
+        { vlan: 'orange', a: core[26], b: null }
+      ];
+
+      const SEGMENTS   = 18;
+      const GRAVITY    = 0.45;
+      const DAMPING    = 0.98;
+      const ITERATIONS = 6;
+      const SNAP       = 22;      // px — plug snaps to a port within this radius
+      const PLUG_IN    = 5;       // px below port centre where the cable pins
+      const PLUG_DX    = -4;      // px left of centre — keeps the port LED visible beside the plug
+      const SLACK      = 1.12;    // patched lead length = distance × SLACK
+
+      const cables = [];
+      let W = 0, H = 0, dpr = 1, floorY = 0, base = 200;
+      let lastW = -1, lastFloor = -1;
+      let drag = null;                 // { cable, end, pointerId, snap }
+      let hovered = null;
+      let visible = true;
+      const pointer = { x: 0, y: 0, t: 0 };
+
+      // ---------- geometry ----------
+      function rel(el) {
+        const r = el.getBoundingClientRect(), c = container.getBoundingClientRect();
+        return { x: r.left - c.left + r.width / 2, y: r.top - c.top + r.height / 2 };
+      }
+      function pinPoint(port) { const p = rel(port); return { x: p.x + PLUG_DX, y: p.y + PLUG_IN }; }
+      function switchOf(port) { return port.closest('.switch-unit'); }
+      function clamp(v, lo, hi) { return v < lo ? lo : v > hi ? hi : v; }
+      function endPoint(cable, end) { return end === 0 ? cable.pts[0] : cable.pts[cable.pts.length - 1]; }
+      function neighbour(cable, end) { return end === 0 ? cable.pts[1] : cable.pts[cable.pts.length - 2]; }
+
+      function setPort(el, cls, randomBlink) {
+        el.className = 'port ' + cls;
+        if (randomBlink) {
+          el.style.setProperty('--blink-speed', (0.6 + Math.random() * 1.6).toFixed(1) + 's');
+          el.style.setProperty('--blink-delay', '0s');
+        }
+      }
+
+      function nearestFreePort(x, y, radius, pool) {
+        let best = null, bd = radius;
+        (pool || allPorts).forEach(p => {
+          if (p.dataset.cabled) return;
+          const c = rel(p);
+          const d = Math.hypot(c.x - x, c.y - y);
+          if (d < bd) { bd = d; best = p; }
+        });
+        return best;
+      }
+
+      // ---------- cables ----------
+      function makeCable(i, def) {
+        const cable = {
+          id: i + 1, vlan: def.vlan, colour: VLANS[def.vlan].colour,
+          ends: [{ port: null, btn: null }, { port: null, btn: null }],
+          pts: [], rest: 0, restTarget: 0, state: 'loose', timer: null, seek: null
+        };
+        cable.ends[0].btn = makeHandle(cable, 0);
+        cable.ends[1].btn = makeHandle(cable, 1);
+        return cable;
+      }
+
+      function layoutCable(cable) {
+        const [e0, e1] = cable.ends;
+        let a, b;
+        if (e0.port) a = pinPoint(e0.port);
+        if (e1.port) b = pinPoint(e1.port);
+        if (a && b) {
+          cable.restTarget = Math.max(60, SLACK * Math.hypot(b.x - a.x, b.y - a.y));
+        } else if (a || b) {
+          const from = a || b;
+          const sway = reduceMotion ? 0 : (cable.id % 2 ? 30 : -30);
+          const hang = { x: clamp(from.x + sway, 8, W - 8), y: Math.min(from.y + base, floorY) };
+          if (a) b = hang; else a = hang;
+          cable.restTarget = base;
+        } else {
+          // Nothing plugged — lay it along the tray where it was
+          const x0 = cable.pts.length ? clamp(cable.pts[0].x, 20, W - 20) : 40;
+          a = { x: x0, y: floorY }; b = { x: clamp(x0 + 60, 20, W - 20), y: floorY };
+          cable.restTarget = base;
+        }
+        cable.rest = cable.restTarget;
+        cable.pts = [];
+        for (let i = 0; i <= SEGMENTS; i++) {
+          const t = i / SEGMENTS;
+          const x = a.x + (b.x - a.x) * t, y = a.y + (b.y - a.y) * t;
+          cable.pts.push({ x, y, ox: x, oy: y, pinned: (i === 0 && !!e0.port) || (i === SEGMENTS && !!e1.port) });
+        }
+      }
+
+      function attachEnd(cable, end, port, instant) {
+        port.dataset.cabled = '1';
+        cable.ends[end].port = port;
+        cable.seek = null;
+        const p = endPoint(cable, end), pin = pinPoint(port);
+        p.pinned = true;
+        p.x = p.ox = pin.x; p.y = p.oy = pin.y;
+        const other = cable.ends[1 - end].port;
+        if (other) {
+          const q = pinPoint(other);
+          cable.restTarget = Math.max(60, SLACK * Math.hypot(pin.x - q.x, pin.y - q.y));
+        }
+        evaluate(cable, instant);
+      }
+
+      function detachEnd(cable, end) {
+        const port = cable.ends[end].port;
+        if (port) { delete port.dataset.cabled; setPort(port, 'state-off'); }
+        cable.ends[end].port = null;
+        cable.seek = null;
+        endPoint(cable, end).pinned = false;
+        cable.restTarget = base;
+        evaluate(cable, true);
+      }
+
+      // Decide what the link does now that the plugs are where they are
+      function evaluate(cable, instant) {
+        clearTimeout(cable.timer);
+        const [e0, e1] = cable.ends;
+        if (!e0.port || !e1.port) {
+          cable.state = 'loose';
+          if (e0.port) setPort(e0.port, 'state-off');
+          if (e1.port) setPort(e1.port, 'state-off');
+          refresh();
+          return;
+        }
+        const s0 = switchOf(e0.port), s1 = switchOf(e1.port);
+        const roles = [s0.dataset.switch, s1.dataset.switch];
+        let result;
+        if (s0 === s1 || !(roles.includes('core') && roles.includes('access'))) result = 'blocked';
+        else if (e0.port.dataset.vlan !== cable.vlan || e1.port.dataset.vlan !== cable.vlan) result = 'fault';
+        else result = 'up';
+
+        const finish = () => {
+          if (cable.ends[0].port !== e0.port || cable.ends[1].port !== e1.port) return;
+          cable.state = result;
+          const cls = result === 'up' ? 'state-active' : result === 'fault' ? 'state-fault' : 'state-uplink';
+          setPort(e0.port, cls, result === 'up');
+          setPort(e1.port, cls, result === 'up');
+          refresh();
+        };
+        if (instant) { finish(); return; }
+        cable.state = 'negotiating';
+        setPort(e0.port, 'state-busy'); setPort(e1.port, 'state-busy');
+        cable.timer = setTimeout(finish, 800 + Math.random() * 500);
+        refresh();
+      }
+
+      // ---------- stats / copy ----------
+      function refresh() {
+        patchStats.total  = cables.length;
+        patchStats.up     = cables.filter(c => c.state === 'up').length;
+        patchStats.loose  = cables.filter(c => c.state !== 'up').length;
+        patchStats.faults = cables.filter(c => c.state === 'fault').length;
+        patchStats.loops  = cables.filter(c => c.state === 'blocked').length;
+        updateReadout();
+        updateHint();
+        cables.forEach(c => { labelHandle(c, 0); labelHandle(c, 1); });
+        container.classList.toggle('is-complete', patchStats.up === patchStats.total);
+      }
+
+      function updateHint() {
+        if (!hint) return;
+        const s = patchStats;
+        let text, cls = '';
+        if (s.loops) {
+          text = 'Blocked by spanning tree — uplinks run from the core to an access switch.'; cls = 'is-warn';
+        } else if (s.faults) {
+          text = s.faults + ' VLAN mismatch' + (s.faults > 1 ? 'es' : '') + ' — check the colour key under the jack at both ends.'; cls = 'is-warn';
+        } else if (s.loose) {
+          text = s.loose + ' uplink' + (s.loose > 1 ? 's' : '') + ' to patch — each floor needs Data, Voice and Management.';
+        } else {
+          text = 'Site patched to standard. Rack perfectionist approved.'; cls = 'is-ok';
+        }
+        hint.textContent = text;
+        hint.className = 'patch-hint ' + cls;
+      }
+
+      function labelHandle(cable, end) {
+        const e = cable.ends[end];
+        const who = VLANS[cable.vlan].name + ' lead ' + cable.id + ', plug ' + (end ? 'B' : 'A') + ': ';
+        let s;
+        if (!e.port) s = 'unplugged. Enter seats it in the nearest free port.';
+        else {
+          const sw = switchOf(e.port).dataset.name;
+          const idx = Array.from(e.port.parentNode.children).indexOf(e.port) + 1;
+          const st = { up: 'link up', fault: 'VLAN mismatch', blocked: 'blocked by STP', negotiating: 'negotiating', loose: 'no link' }[cable.state] || cable.state;
+          s = 'in ' + sw + ' port ' + idx + ', ' + st + '. Enter unplugs; arrow keys move it.';
+        }
+        e.btn.setAttribute('aria-label', who + s);
+      }
+
+      // ---------- plug handles: real buttons riding on each plug ----------
+      function makeHandle(cable, end) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'plug-handle';
+        btn.addEventListener('pointerdown', e => onDown(e, cable, end));
+        btn.addEventListener('pointermove', onMove);
+        btn.addEventListener('pointerup', onUp);
+        btn.addEventListener('pointercancel', onUp);
+        btn.addEventListener('pointerenter', () => { hovered = cable; });
+        btn.addEventListener('pointerleave', () => { if (hovered === cable) hovered = null; });
+        btn.addEventListener('keydown', e => onKey(e, cable, end));
+        handles.appendChild(btn);
+        return btn;
+      }
+
+      function onKey(e, cable, end) {
+        const ep = cable.ends[end];
+        const p = endPoint(cable, end);
+        let target = null;
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          if (ep.port) { detachEnd(cable, end); return; }
+          target = nearestFreePort(p.x, p.y, Infinity);
+        } else if (ep.port && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+          e.preventDefault();
+          // Next free port on the same switch
+          const ports = Array.from(switchOf(ep.port).querySelectorAll('.port'));
+          let i = ports.indexOf(ep.port);
+          for (let k = 0; k < ports.length; k++) {
+            i = (i + (e.key === 'ArrowRight' ? 1 : -1) + ports.length) % ports.length;
+            if (!ports[i].dataset.cabled) { target = ports[i]; break; }
+          }
+        } else if (ep.port && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
+          e.preventDefault();
+          // Closest free port on the next switch up / down the stack
+          const cur = switchOf(ep.port);
+          const order = switches.slice().sort((a, b) => a.offsetTop - b.offsetTop || a.offsetLeft - b.offsetLeft);
+          const i = order.indexOf(cur);
+          const next = order[(i + (e.key === 'ArrowDown' ? 1 : -1) + order.length) % order.length];
+          target = nearestFreePort(p.x, p.y, Infinity, Array.from(next.querySelectorAll('.port')));
+        }
+        if (!target) return;
+        if (ep.port) detachEnd(cable, end);
+        target.dataset.cabled = '1';          // reserve it while the plug travels
+        cable.seek = { end, port: target };
+        p.pinned = true;
+      }
+
+      function toLocal(e) {
+        const c = container.getBoundingClientRect();
+        return { x: e.clientX - c.left, y: e.clientY - c.top };
+      }
+
+      function onDown(e, cable, end) {
+        if (e.button !== 0) return;
+        e.preventDefault();
+        const btn = cable.ends[end].btn;
+        btn.setPointerCapture(e.pointerId);
+        btn.classList.add('dragging');
+        if (cable.seek) { delete cable.seek.port.dataset.cabled; cable.seek = null; }
+        if (cable.ends[end].port) detachEnd(cable, end);
+        const p = endPoint(cable, end), pt = toLocal(e);
+        p.pinned = true;
+        p.ox = p.x = pt.x; p.oy = p.y = pt.y;
+        drag = { cable, end, pointerId: e.pointerId, snap: null };
+        updateDragTarget(pt);
+      }
+
+      function onMove(e) {
+        if (!drag || drag.pointerId !== e.pointerId) return;
+        const p = endPoint(drag.cable, drag.end), pt = toLocal(e);
+        p.ox = p.x; p.oy = p.y;
+        p.x = clamp(pt.x, -10, W + 10);
+        p.y = clamp(pt.y, -10, H + 10);
+        updateDragTarget(pt);
+      }
+
+      function updateDragTarget(pt) {
+        drag.snap = nearestFreePort(pt.x, pt.y, SNAP);
+        // If the far end is seated, let the lead pay out so it never fights the pointer
+        const other = drag.cable.ends[1 - drag.end].port;
+        if (other) {
+          const q = pinPoint(other);
+          drag.cable.restTarget = Math.max(base, 1.05 * Math.hypot(pt.x - q.x, pt.y - q.y));
+        }
+      }
+
+      function onUp(e) {
+        if (!drag || drag.pointerId !== e.pointerId) return;
+        const { cable, end, snap } = drag;
+        cable.ends[end].btn.classList.remove('dragging');
+        drag = null;
+        if (snap) { attachEnd(cable, end, snap, false); return; }
+        const p = endPoint(cable, end);
+        p.ox = p.x - clamp(p.x - p.ox, -6, 6);   // keep a little of the throw, not a fling
+        p.oy = p.y - clamp(p.y - p.oy, -6, 6);
+        p.pinned = false;
+        cable.restTarget = base;
+        refresh();
+      }
+
+      // Brushing the cursor past a loose lead nudges it
+      container.addEventListener('pointermove', e => {
+        const p = toLocal(e), now = performance.now();
+        const dt = Math.max(1, now - pointer.t);
+        const vx = clamp((p.x - pointer.x) / dt * 16, -8, 8);
+        const vy = clamp((p.y - pointer.y) / dt * 16, -8, 8);
+        pointer.x = p.x; pointer.y = p.y; pointer.t = now;
+        if (drag || reduceMotion) return;
+        cables.forEach(c => c.pts.forEach(q => {
+          if (q.pinned) return;
+          if (Math.abs(q.x - p.x) < 14 && Math.abs(q.y - p.y) < 14) { q.ox -= vx * 0.3; q.oy -= vy * 0.3; }
+        }));
+      });
+
+      // Scrolling the page gives loose leads a little sway
+      let lastScroll = window.scrollY;
+      window.addEventListener('scroll', () => {
+        const d = clamp(window.scrollY - lastScroll, -40, 40);
+        lastScroll = window.scrollY;
+        if (reduceMotion || !visible) return;
+        cables.forEach(c => c.pts.forEach(q => { if (!q.pinned) q.oy += d * 0.06; }));
+      }, { passive: true });
+
+      // ---------- physics ----------
+      function step(cable) {
+        const pts = cable.pts, n = pts.length;
+
+        if (cable.seek) {                          // keyboard glide into a port
+          const p = endPoint(cable, cable.seek.end), pin = pinPoint(cable.seek.port);
+          p.x += (pin.x - p.x) * 0.18; p.y += (pin.y - p.y) * 0.18;
+          p.ox = p.x; p.oy = p.y;
+          if (Math.hypot(pin.x - p.x, pin.y - p.y) < 1.5) attachEnd(cable, cable.seek.end, cable.seek.port, false);
+        }
+
+        for (let i = 0; i < n; i++) {
+          const p = pts[i];
+          if (p.pinned) continue;
+          const vx = (p.x - p.ox) * DAMPING, vy = (p.y - p.oy) * DAMPING;
+          p.ox = p.x; p.oy = p.y;
+          p.x += vx; p.y += vy + GRAVITY;
+        }
+
+        cable.rest += (cable.restTarget - cable.rest) * 0.12;
+        const seg = cable.rest / SEGMENTS;
+
+        for (let k = 0; k < ITERATIONS; k++) {
+          for (let i = 0; i < n - 1; i++) {
+            const a = pts[i], b = pts[i + 1];
+            const dx = b.x - a.x, dy = b.y - a.y;
+            const d = Math.hypot(dx, dy) || 0.0001;
+            const diff = (d - seg) / d;
+            if (a.pinned && b.pinned) continue;
+            if (a.pinned)      { b.x -= dx * diff; b.y -= dy * diff; }
+            else if (b.pinned) { a.x += dx * diff; a.y += dy * diff; }
+            else { a.x += dx * diff * 0.5; a.y += dy * diff * 0.5; b.x -= dx * diff * 0.5; b.y -= dy * diff * 0.5; }
+          }
+          for (let i = 0; i < n; i++) {
+            const p = pts[i];
+            if (p.pinned) continue;
+            if (p.y > floorY) { p.y = floorY; p.ox += (p.x - p.ox) * 0.5; }   // rack tray, with friction
+            if (p.y < 2) p.y = 2;
+            if (p.x < 4) p.x = 4; else if (p.x > W - 4) p.x = W - 4;
+          }
+        }
+      }
+
+      // ---------- drawing ----------
+      function roundRect(x, y, w, h, r) {
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.arcTo(x + w, y, x + w, y + h, r);
+        ctx.arcTo(x + w, y + h, x, y + h, r);
+        ctx.arcTo(x, y + h, x, y, r);
+        ctx.arcTo(x, y, x + w, y, r);
+        ctx.closePath();
+      }
+
+      // RJ45 plug: `end` is the cable tip, `prev` the point behind it
+      function drawPlug(end, prev, colour, vertical, live) {
+        ctx.save();
+        ctx.translate(end.x, end.y);
+        ctx.rotate(vertical ? -Math.PI / 2 : Math.atan2(end.y - prev.y, end.x - prev.x));
+        ctx.fillStyle = colour; ctx.globalAlpha = 0.9;
+        roundRect(-6, -2.8, 5, 5.6, 1.5); ctx.fill();               // boot
+        ctx.globalAlpha = 1;
+        roundRect(-2, -4.5, 10, 9, 1.5);                            // body
+        ctx.fillStyle = '#0c131a'; ctx.fill();
+        ctx.lineWidth = 1.2; ctx.strokeStyle = live ? colour : 'rgba(139,170,187,0.55)'; ctx.stroke();
+        ctx.fillStyle = 'rgba(139,170,187,0.5)';
+        ctx.fillRect(1, -6.3, 5, 1.6);                              // latch
+        ctx.fillStyle = 'rgba(255,214,110,0.55)';
+        for (let i = 0; i < 4; i++) ctx.fillRect(5.8, -3.2 + i * 1.8, 2, 0.9);   // contacts
+        ctx.restore();
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+
+        for (const cable of cables) {
+          const pts = cable.pts, n = pts.length;
+          ctx.beginPath();
+          ctx.moveTo(pts[0].x, pts[0].y);
+          for (let i = 1; i < n - 1; i++) {
+            ctx.quadraticCurveTo(pts[i].x, pts[i].y, (pts[i].x + pts[i + 1].x) / 2, (pts[i].y + pts[i + 1].y) / 2);
+          }
+          ctx.lineTo(pts[n - 1].x, pts[n - 1].y);
+
+          const hot = hovered === cable || (drag && drag.cable === cable);
+          ctx.strokeStyle = 'rgba(0,0,0,0.55)'; ctx.lineWidth = 6.5; ctx.stroke();
+          if (hot) { ctx.shadowColor = cable.colour; ctx.shadowBlur = 10; }
+          ctx.strokeStyle = cable.colour; ctx.lineWidth = 3.4; ctx.stroke();
+          ctx.shadowBlur = 0;
+          ctx.strokeStyle = 'rgba(255,255,255,0.22)'; ctx.lineWidth = 1; ctx.stroke();
+
+          const live = cable.state === 'up';
+          drawPlug(pts[0], pts[1], cable.colour, !!cable.ends[0].port, live);
+          drawPlug(pts[n - 1], pts[n - 2], cable.colour, !!cable.ends[1].port, live);
+        }
+
+        if (drag && drag.snap) {
+          const c = rel(drag.snap);
+          ctx.beginPath();
+          ctx.arc(c.x, c.y, 13, 0, Math.PI * 2);
+          ctx.strokeStyle = drag.cable.colour; ctx.lineWidth = 1.5;
+          ctx.setLineDash([3, 3]); ctx.stroke(); ctx.setLineDash([]);
+        }
+      }
+
+      function placeHandles() {
+        for (const cable of cables) {
+          for (let end = 0; end < 2; end++) {
+            const p = endPoint(cable, end);
+            cable.ends[end].btn.style.transform = 'translate(' + (p.x - 14).toFixed(1) + 'px,' + (p.y - 14).toFixed(1) + 'px)';
+          }
+        }
+      }
+
+      // ---------- layout / lifecycle ----------
+      function layout() {
+        W = container.clientWidth; H = container.clientHeight;
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        floorY = readout ? readout.offsetTop - 4 : H - 10;
+        // A loose lead reaches from the core's bottom row to the tray, plus a little to lie on it
+        const coreBottom = gCore.getBoundingClientRect().bottom - container.getBoundingClientRect().top;
+        base = Math.max(120, (floorY - coreBottom) * 1.1 + 50);
+        if (W !== lastW || Math.abs(floorY - lastFloor) > 1) {
+          lastW = W; lastFloor = floorY;
+          cables.forEach(layoutCable);
+        }
+      }
+
+      function init() {
+        START.forEach((def, i) => cables.push(makeCable(i, def)));
+        layout();
+        START.forEach((def, i) => {
+          if (def.a && !def.a.dataset.cabled) attachEnd(cables[i], 0, def.a, true);
+          if (def.b && !def.b.dataset.cabled) attachEnd(cables[i], 1, def.b, true);
+        });
+        lastW = -1; layout();      // now the ends are seated, lay the ropes between them
+        refresh();
+      }
+
+      // Rules panel
+      const infoBtn = document.getElementById('patchInfoBtn');
+      const info    = document.getElementById('patchInfo');
+      const infoClose = document.getElementById('patchInfoClose');
+      function setInfo(open) {
+        if (!info || !infoBtn) return;
+        info.hidden = !open;
+        infoBtn.setAttribute('aria-expanded', String(open));
+        if (open) info.focus();
+      }
+      if (infoBtn) infoBtn.addEventListener('click', () => setInfo(info.hidden));
+      if (infoClose) infoClose.addEventListener('click', () => { setInfo(false); infoBtn.focus(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && info && !info.hidden) setInfo(false); });
+
+      let prev = performance.now(), acc = 0;
+      function frame(now) {
+        requestAnimationFrame(frame);
+        if (!visible || document.hidden || W === 0) { prev = now; return; }
+        acc += Math.min(now - prev, 50); prev = now;
+        while (acc >= 16.6) { cables.forEach(step); acc -= 16.6; }
+        draw(); placeHandles();
+      }
+
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(es => { visible = es[0].isIntersecting; }).observe(container);
+      }
+      let rafLayout = 0;
+      const requestLayout = () => { cancelAnimationFrame(rafLayout); rafLayout = requestAnimationFrame(layout); };
+      if ('ResizeObserver' in window) new ResizeObserver(requestLayout).observe(container);
+      window.addEventListener('resize', requestLayout);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(requestLayout);
+
+      init();
+      requestAnimationFrame(frame);
+    })();
+
+    updateReadout();
+    setInterval(updateReadout, 1400);
 
 
     // -------------------------------------------------------
