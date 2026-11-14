@@ -1,5 +1,5 @@
 /* ============================================================
-   HARRY ROBEY — CV SITE STYLESHEET  (v2 "Signal" refresh)
+   HARRY ROBEY — CV SITE STYLESHEET  (v3 Executive + Architectural)
    style.css
 
    THE 2 + 1 PALETTE
@@ -11,24 +11,6 @@
    Accent  Signal Volt      #D4FF3A   ≤10% — ONLY where the eye
                                        should land or something
                                        is "live"
-
-   WHERE VOLT IS ALLOWED (keep it that way):
-     • Primary CTA buttons (.btn-primary, .nav-cta)
-     • The full stop after the name + logo — the signature mark
-     • "Live" states: current-role dot & badge, link-up LEDs,
-       the typing cursor, the "patched to standard" message,
-       the active nav item marker
-     • The Management VLAN lead in the patch bay (focal object)
-   Never use volt for backgrounds, body copy or decoration.
-
-   SYSTEM COLOURS (not brand — patch bay status only):
-     --amber #FFB020 (STP blocked)   --red #FF4D5E (VLAN mismatch)
-
-   TYPE
-     Geist (sans)  — headlines + body
-     Instrument Serif italic — one or two emphasis words per heading
-     Geist Mono    — labels, data, the terminal-ish details
-   Fonts load via <link> tags in index.html (faster than @import).
    ============================================================ */
 
 
@@ -44,9 +26,9 @@
 
   /* Base 2 — Electric Cobalt */
   --cobalt:      #3355FF;
-  --cobalt-300:  #7C93FF;   /* readable tint on dark */
+  --cobalt-300:  #7C93FF;
   --cobalt-200:  #A9B8FF;
-  --cobalt-100:  #D3DBFF;   /* serif emphasis */
+  --cobalt-100:  #D3DBFF;
   --cobalt-glow: rgba(51, 85, 255, 0.35);
 
   /* Accent — Signal Volt */
@@ -54,11 +36,11 @@
   --volt-soft: rgba(212, 255, 58, 0.12);
   --volt-glow: 0 0 24px rgba(212, 255, 58, 0.45);
 
-  /* Neutrals (ink-tinted whites) */
-  --text-100: #F4F6FB;   /* headings */
-  --text-70:  #B3BBCC;   /* body */
-  --text-50:  #7D869A;   /* meta */
-  --text-30:  #4A5266;   /* faint */
+  /* Neutrals */
+  --text-100: #F4F6FB;
+  --text-70:  #B3BBCC;
+  --text-50:  #7D869A;
+  --text-30:  #4A5266;
 
   /* Lines & glass */
   --line:      rgba(255, 255, 255, 0.08);
@@ -66,12 +48,12 @@
   --glass:     linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.015));
   --glass-solid: rgba(14, 17, 25, 0.72);
 
-  /* Patch bay VLAN keys (cable + jack colour) */
-  --vlan-data:  #5C7BFF;   /* cobalt family */
-  --vlan-voice: #E6EBF5;   /* ice */
-  --vlan-mgmt:  #D4FF3A;   /* volt */
+  /* Patch bay VLAN keys */
+  --vlan-data:  #5C7BFF;
+  --vlan-voice: #E6EBF5;
+  --vlan-mgmt:  #D4FF3A;
 
-  /* System status (patch bay only) */
+  /* System status */
   --amber: #FFB020;
   --red:   #FF4D5E;
 
@@ -107,10 +89,9 @@ body {
 }
 
 ::selection { background: var(--cobalt); color: #fff; }
-
 a { color: inherit; }
 
-/* Atmospheric mesh — fixed so glass cards always have light behind them */
+/* Atmospheric mesh + subtle architectural micro-grid */
 body::before {
   content: '';
   position: fixed;
@@ -121,17 +102,20 @@ body::before {
     radial-gradient(55% 45% at 12% -5%,  rgba(51,85,255,0.20), transparent 70%),
     radial-gradient(35% 35% at 95% 20%,  rgba(51,85,255,0.10), transparent 70%),
     radial-gradient(45% 40% at 70% 105%, rgba(51,85,255,0.14), transparent 70%),
-    radial-gradient(30% 30% at 0% 75%,   rgba(51,85,255,0.07), transparent 70%);
+    radial-gradient(30% 30% at 0% 75%,   rgba(51,85,255,0.07), transparent 70%),
+    linear-gradient(rgba(255,255,255,0.014) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.014) 1px, transparent 1px);
+  background-size: auto, auto, auto, auto, 72px 72px, 72px 72px;
 }
 
-/* Film grain — kills gradient banding and adds tactility */
+/* Film grain */
 body::after {
   content: '';
   position: fixed;
   inset: 0;
   z-index: 100;
   pointer-events: none;
-  opacity: 0.045;
+  opacity: 0.04;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
@@ -149,15 +133,11 @@ body::after {
   padding: 0 28px;
 }
 
-section { padding: 140px 0; position: relative; }
+section { padding: 128px 0; position: relative; }
 
 
 /* ===========================
-   NAVIGATION — floating glass pill
-   To add a new nav link:
-   1. Copy a <li> inside .nav-links
-   2. Update the href and label text
-   3. For external links add target="_blank" rel="noopener"
+   NAVIGATION
 =========================== */
 nav {
   position: fixed;
@@ -173,7 +153,7 @@ nav {
   gap: 16px;
   padding: 0 10px 0 24px;
   border-radius: 999px;
-  background: rgba(12, 14, 21, 0.6);
+  background: rgba(12, 14, 21, 0.68);
   backdrop-filter: blur(18px) saturate(160%);
   -webkit-backdrop-filter: blur(18px) saturate(160%);
   border: 1px solid var(--line);
@@ -209,7 +189,7 @@ nav {
 }
 .nav-links a:hover { color: var(--text-100); background: rgba(255,255,255,0.05); }
 .nav-links a.is-active { color: var(--text-100); }
-.nav-links a.is-active::after {          /* "you are here" — a live state, so volt */
+.nav-links a.is-active::after {
   content: '';
   position: absolute;
   left: 50%; bottom: 2px;
@@ -238,7 +218,6 @@ nav {
 }
 .nav-cta:hover { box-shadow: var(--volt-glow); transform: translateY(-1px); }
 
-/* Hamburger (mobile) */
 .nav-toggle {
   display: none;
   width: 40px; height: 40px;
@@ -276,7 +255,6 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
   isolation: isolate;
 }
 
-/* Light blooms */
 .hero-glow-1,
 .hero-glow-2 {
   position: absolute;
@@ -301,7 +279,6 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
   50%      { transform: scale(1.06); opacity: .8; }
 }
 
-/* Vertical light streaks — light running down fibre */
 .hero-streaks {
   position: absolute;
   inset: 0;
@@ -336,23 +313,22 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
 
 .hero-inner {
   width: 100%;
-  padding: 150px 0 100px;
+  padding: 140px 0 92px;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 520px;
-  gap: 64px;
+  gap: 56px;
   align-items: center;
 }
 
 .hero-text { min-width: 0; }
 
-/* Eyebrow chip */
 .hero-tag {
   display: inline-flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 10px;
   padding: 7px 14px 7px 12px;
-  margin-bottom: 30px;
+  margin-bottom: 26px;
   border-radius: 999px;
   border: 1px solid var(--line);
   background: rgba(255,255,255,0.03);
@@ -381,12 +357,12 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
 
 .hero-name {
   font-family: var(--sans);
-  font-size: clamp(68px, 9vw, 144px);
+  font-size: clamp(64px, 8.2vw, 132px);
   font-weight: 600;
   line-height: 0.9;
   letter-spacing: -0.055em;
-  padding: 0 0.08em 0.14em 0;       /* room for the italic overhang + the y descender (background-clip clips at the box) */
-  margin-bottom: 18px;
+  padding: 0 0.08em 0.14em 0;
+  margin-bottom: 16px;
   background: linear-gradient(180deg, #FFFFFF 35%, #9EAAD0 100%);
   -webkit-background-clip: text;
           background-clip: text;
@@ -402,7 +378,7 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
   font-size: 1.06em;
   padding-right: 0.04em;
 }
-.hero-name .name-dot {                /* the signature mark */
+.hero-name .name-dot {
   -webkit-text-fill-color: var(--volt);
   color: var(--volt);
   text-shadow: 0 0 40px rgba(212,255,58,0.35);
@@ -410,12 +386,12 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
 
 .hero-title-line {
   font-family: var(--mono);
-  font-size: clamp(13px, 1.3vw, 15px);
+  font-size: clamp(13px, 1.25vw, 15px);
   color: var(--text-70);
-  margin-bottom: 26px;
+  margin-bottom: 22px;
   min-height: 24px;
   opacity: 0;
-  animation: fadeUp .9s var(--ease) forwards .35s;
+  animation: fadeUp .9s var(--ease) forwards .32s;
 }
 .hero-title-line::before { content: '~/ '; color: var(--cobalt-300); }
 .hero-title-line .cursor {
@@ -430,16 +406,54 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
 .hero-bio {
-  max-width: 34ch;
-  font-size: clamp(18px, 1.55vw, 21px);
-  line-height: 1.5;
+  max-width: 38ch;
+  font-size: clamp(17px, 1.4vw, 19.5px);
+  line-height: 1.55;
   letter-spacing: -0.01em;
   color: var(--text-70);
-  margin-bottom: 40px;
+  margin-bottom: 28px;
   opacity: 0;
-  animation: fadeUp .9s var(--ease) forwards .45s;
+  animation: fadeUp .9s var(--ease) forwards .42s;
 }
 .hero-bio strong { color: var(--text-100); font-weight: 500; }
+
+/* CEO 10-Second Proof Strip */
+.exec-proof-bar {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  max-width: 540px;
+  margin-bottom: 34px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--line-2);
+  border: 1px solid var(--line-2);
+  box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  animation: fadeUp .9s var(--ease) forwards .48s;
+}
+.proof-item {
+  padding: 14px 16px;
+  background: rgba(12, 15, 22, 0.88);
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.proof-metric {
+  font-family: var(--sans);
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text-100);
+}
+.proof-item:first-child .proof-metric { color: var(--volt); }
+.proof-label {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  line-height: 1.35;
+  color: var(--text-50);
+}
 
 .hero-links {
   display: flex;
@@ -449,7 +463,7 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
   animation: fadeUp .9s var(--ease) forwards .55s;
 }
 
-/* Right: the rig — glass frame around the patch bay */
+/* Right: Interactive rack frame */
 .hero-visual {
   position: relative;
   padding: 20px;
@@ -465,7 +479,6 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
   opacity: 0;
   animation: fadeUp 1s var(--ease) forwards .4s;
 }
-/* Cobalt rim-light along the top edge */
 .hero-visual::before {
   content: '';
   position: absolute;
@@ -486,16 +499,25 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
   text-transform: uppercase;
   color: var(--text-50);
 }
-.rig-bar-title { display: inline-flex; align-items: center; gap: 8px; }
+.rig-bar-title { display: inline-flex; align-items: center; gap: 8px; color: var(--text-70); }
 .rig-bar-title::before {
   content: '';
   width: 6px; height: 6px;
   border-radius: 50%;
-  background: var(--cobalt-300);
-  box-shadow: 0 0 8px var(--cobalt);
+  background: var(--volt);
+  box-shadow: 0 0 8px var(--volt);
   animation: pulse 2.4s infinite;
 }
-.rig-bar-hint { color: var(--text-30); text-transform: none; letter-spacing: 0.02em; }
+.rig-bar-hint {
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(51, 85, 255, 0.14);
+  border: 1px solid rgba(124, 147, 255, 0.25);
+  color: var(--cobalt-200);
+  text-transform: none;
+  letter-spacing: 0.02em;
+  font-size: 10.5px;
+}
 
 @keyframes pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
@@ -521,7 +543,6 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
   box-shadow: 0 6px 24px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.05);
 }
 
-/* Rack screws */
 .switch-unit::before,
 .switch-unit::after {
   content: '';
@@ -557,7 +578,6 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
 .status-led.warn { background: #3A4154; }
 .switch-container.is-complete .status-led.warn { background: var(--volt); box-shadow: 0 0 6px var(--volt); }
 
-/* Port grid — --cols is set inline per switch */
 .port-grid {
   display: grid;
   grid-template-columns: repeat(var(--cols, 12), 1fr);
@@ -588,30 +608,28 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
   border-radius: 50%;
 }
 
-/* Port states — set by JS */
 .port.state-off .port-led { background: #1C2130; }
-.port.state-active .port-led {                    /* link up = live = volt */
+.port.state-active .port-led {
   background: var(--volt);
   box-shadow: 0 0 6px var(--volt);
   animation: portBlink var(--blink-speed, 1s) step-end infinite var(--blink-delay, 0s);
 }
-.port.state-busy .port-led {                      /* negotiating */
+.port.state-busy .port-led {
   background: var(--cobalt-300);
   box-shadow: 0 0 6px var(--cobalt);
   animation: portBlink .2s step-end infinite var(--blink-delay, 0s);
 }
-.port.state-uplink .port-led {                    /* STP blocked */
+.port.state-uplink .port-led {
   background: var(--amber);
   box-shadow: 0 0 6px var(--amber);
 }
-.port.state-fault .port-led {                     /* VLAN mismatch */
+.port.state-fault .port-led {
   background: var(--red);
   box-shadow: 0 0 7px var(--red);
   animation: portBlink .45s step-end infinite;
 }
 @keyframes portBlink { 0%,100% { opacity: 1; } 50% { opacity: .1; } }
 
-/* RJ45 slot line — doubles as the VLAN colour key on tagged ports */
 .port-body::before {
   content: '';
   position: absolute;
@@ -625,7 +643,6 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
 .port[data-vlan="green"]  .port-body::before { background: var(--vlan-voice); box-shadow: 0 0 4px rgba(230,235,245,0.35); }
 .port[data-vlan="orange"] .port-body::before { background: var(--vlan-mgmt);  box-shadow: 0 0 4px rgba(212,255,58,0.4); }
 
-/* SFP uplink ports */
 .sfp-row {
   display: flex;
   gap: 6px;
@@ -653,7 +670,6 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
 .sfp-port .port-led { position: absolute; top: 2px; right: 2px; width: 4px; height: 4px; border-radius: 50%; }
 .sfp-active .port-led { background: var(--cobalt-300); box-shadow: 0 0 6px var(--cobalt); }
 
-/* Two access switches side by side */
 .access-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -673,7 +689,6 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
   color: var(--text-30);
 }
 
-/* Live readout — this is also the "cable tray" the loose leads rest on */
 .network-readout {
   width: 100%;
   display: grid;
@@ -702,10 +717,7 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
 
 
 /* ===========================
-   PATCH BAY (draggable cables)
-   Canvas draws the cables over the switches; the plug handles
-   are invisible buttons riding on each cable tip so plugs are
-   draggable, tappable and keyboard-focusable.
+   PATCH BAY
 =========================== */
 .patch-canvas {
   position: absolute;
@@ -794,11 +806,11 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
   z-index: 6;
   padding: 20px 22px 18px;
   border-radius: 16px;
-  background: rgba(11, 13, 19, 0.9);
+  background: rgba(11, 13, 19, 0.94);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--line-2);
-  box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.65);
   font-size: 13px;
   line-height: 1.65;
   color: var(--text-70);
@@ -869,7 +881,6 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
 .btn .arr { transition: transform .25s var(--ease); }
 .btn:hover .arr { transform: translateX(3px); }
 
-/* The one loud button */
 .btn-primary {
   background: var(--volt);
   color: var(--ink-950);
@@ -880,7 +891,6 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
   box-shadow: 0 10px 40px -6px rgba(212,255,58,0.55), inset 0 -2px 0 rgba(0,0,0,0.12);
 }
 
-/* Quiet glass button */
 .btn-ghost {
   background: rgba(255,255,255,0.04);
   color: var(--text-100);
@@ -913,7 +923,7 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
 
 
 /* ===========================
-   SKILLS TICKER
+   SKILLS TICKER — Restrained, architectural band
 =========================== */
 #skills-bar {
   position: relative;
@@ -922,13 +932,13 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
   border-bottom: 1px solid var(--line);
   overflow: hidden;
   background: rgba(255,255,255,0.012);
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
-          mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
 }
 .skills-scroll {
   display: flex;
   width: max-content;
-  animation: marquee 70s linear infinite;
+  animation: marquee 55s linear infinite;
 }
 .skills-scroll:hover { animation-play-state: paused; }
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
@@ -936,22 +946,23 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
 .skill-tag {
   display: inline-flex;
   align-items: center;
-  gap: 28px;
-  padding: 26px 0 26px 28px;
-  font-size: 22px;
+  gap: 32px;
+  padding: 20px 0 20px 32px;
+  font-family: var(--mono);
+  font-size: 12.5px;
   font-weight: 500;
-  letter-spacing: -0.02em;
-  color: var(--text-30);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-50);
   white-space: nowrap;
   transition: color .2s;
 }
 .skill-tag::after {
-  content: '✦';
-  font-size: 11px;
+  content: '·';
+  font-size: 16px;
   color: var(--cobalt-300);
-  opacity: .6;
+  opacity: .75;
 }
-.skill-tag:nth-child(3n+2) { color: var(--text-50); }
 .skill-tag:hover { color: var(--text-100); }
 
 
@@ -962,7 +973,7 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 22px;
+  margin-bottom: 20px;
   font-family: var(--mono);
   font-size: 12px;
   font-weight: 500;
@@ -977,6 +988,14 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
 }
 .section-num { color: var(--cobalt-300); }
 
+.section-head-split {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 32px;
+  margin-bottom: 64px;
+}
+
 .section-title,
 .about-block h3,
 #contact h2 {
@@ -986,10 +1005,10 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
   color: var(--text-100);
 }
 .section-title {
-  max-width: 17ch;
-  margin-bottom: 72px;
-  font-size: clamp(40px, 5.6vw, 76px);
-  line-height: 1;
+  max-width: 16ch;
+  margin-bottom: 0;
+  font-size: clamp(38px, 5.2vw, 72px);
+  line-height: 1.02;
 }
 .section-title em,
 .about-block h3 em,
@@ -1000,15 +1019,120 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
   letter-spacing: -0.02em;
   color: var(--cobalt-100);
 }
+.section-sub {
+  max-width: 38ch;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-50);
+  padding-bottom: 6px;
+}
 
-/* Generic scroll-reveal */
 .reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
 .reveal.visible { opacity: 1; transform: none; }
 
 
 /* ===========================
-   CAREER TIMELINE
+   HIGHLIGHTS — BENTO GRID (Section 01)
 =========================== */
+.highlights-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+.highlight-card:nth-child(1),
+.highlight-card:nth-child(6) { grid-column: span 2; }
+
+.highlight-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 290px;
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  border-radius: var(--radius-lg);
+  background: var(--glass);
+  border: 1px solid var(--line);
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .7s var(--ease), transform .5s var(--ease), border-color .3s;
+}
+.highlight-card.visible { opacity: 1; transform: none; }
+.highlight-card:hover { border-color: rgba(124,147,255,0.32); transform: translateY(-4px) !important; }
+
+.highlight-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(124,147,255,0.7), transparent);
+  opacity: .6;
+}
+
+.highlight-icon {
+  width: 44px; height: 44px;
+  display: grid;
+  place-items: center;
+  margin-bottom: auto;
+  border-radius: 13px;
+  color: var(--cobalt-200);
+  background: rgba(51,85,255,0.12);
+  border: 1px solid rgba(124,147,255,0.25);
+  box-shadow: 0 0 30px -6px rgba(51,85,255,0.5);
+}
+.highlight-icon svg,
+.info-icon svg { width: 21px; height: 21px; }
+
+.hl-kicker {
+  margin-top: 32px;
+  margin-bottom: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cobalt-300);
+}
+
+.highlight-card h4 {
+  position: relative;
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.22;
+  color: var(--text-100);
+}
+.highlight-card p {
+  position: relative;
+  max-width: 52ch;
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--text-70);
+}
+.highlight-card:nth-child(1) h4,
+.highlight-card:nth-child(6) h4 { font-size: clamp(23px, 2.3vw, 28px); max-width: 22ch; }
+
+.hl-big {
+  position: absolute;
+  top: 6px; right: 26px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(86px, 10.5vw, 150px);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(124,147,255,0.5), rgba(124,147,255,0));
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+}
+.highlight-card:nth-child(6) .hl-big { top: 18px; right: 24px; font-size: clamp(60px, 7vw, 106px); }
+
+
+/* ===========================
+   CAREER TIMELINE (Section 02)
+=========================== */
+#career { border-top: 1px solid var(--line); }
+
 .timeline { position: relative; }
 .timeline::before {
   content: '';
@@ -1019,26 +1143,11 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
   background: linear-gradient(to bottom, transparent, rgba(124,147,255,0.6) 4%, rgba(255,255,255,0.08) 55%, transparent);
 }
 
-/* ============================================================
-   JOB CARDS
-   HOW TO ADD A NEW ROLE:
-   1. Copy any .job block from index.html
-   2. Paste it ABOVE the current first job (newest at top)
-   3. Update: .job-year, .job-location, h3, .company,
-      .job-summary p, .job-bullets li
-   4. Dots colour themselves: the FIRST job gets the volt "live"
-      dot, the LAST gets a muted dot, everything else is cobalt.
-      Only the current role should carry the badge:
-      <span class="badge badge-current">Current</span>
-   5. An earlier role at the same employer: after the first
-      .job-bullets add another .job-title / .job-summary /
-      .job-bullets — it's automatically labelled "Previously".
-   ============================================================ */
 .job {
   display: grid;
   grid-template-columns: 200px minmax(0, 1fr);
   gap: 0 48px;
-  margin-bottom: 40px;
+  margin-bottom: 36px;
   opacity: 0;
   transform: translateY(24px);
   transition: opacity .7s var(--ease), transform .7s var(--ease);
@@ -1060,8 +1169,11 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
   background: var(--cobalt-300);
   box-shadow: 0 0 12px var(--cobalt);
 }
-.job:first-child .job-dot { background: var(--volt); box-shadow: 0 0 14px var(--volt); }
-.job:first-child .job-dot::after {
+.timeline:not(.timeline-secondary) .job:first-child .job-dot {
+  background: var(--volt);
+  box-shadow: 0 0 14px var(--volt);
+}
+.timeline:not(.timeline-secondary) .job:first-child .job-dot::after {
   content: '';
   position: absolute;
   inset: -6px;
@@ -1070,7 +1182,7 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
   animation: ring 2.4s var(--ease) infinite;
 }
 @keyframes ring { from { transform: scale(.5); opacity: .9; } to { transform: scale(1.8); opacity: 0; } }
-.job:last-child .job-dot { background: var(--text-30); box-shadow: none; }
+.timeline-secondary .job:last-child .job-dot { background: var(--text-30); box-shadow: none; }
 
 .job-year {
   display: block;
@@ -1097,16 +1209,14 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
   transition: border-color .3s, transform .3s var(--ease);
 }
 .job-content:hover { border-color: rgba(124,147,255,0.28); }
-.job-content > br,
-.job-summary > br { display: none; }
 
-.job-title { margin-bottom: 18px; }
+.job-title { margin-bottom: 16px; }
 .job-title h3 {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 4px 12px;
-  font-size: clamp(22px, 2.2vw, 28px);
+  font-size: clamp(22px, 2.2vw, 27px);
   font-weight: 600;
   letter-spacing: -0.03em;
   line-height: 1.2;
@@ -1119,10 +1229,9 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
   color: var(--text-50);
 }
 
-/* Earlier role at the same employer */
 .job-bullets ~ .job-title {
-  margin-top: 36px;
-  padding-top: 32px;
+  margin-top: 34px;
+  padding-top: 30px;
   border-top: 1px solid var(--line);
 }
 .job-bullets ~ .job-title::before {
@@ -1137,25 +1246,28 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
 }
 .job-bullets ~ .job-title h3 { font-size: clamp(19px, 1.8vw, 22px); }
 
-.job-summary { margin-bottom: 22px; max-width: 72ch; }
+.job-summary { margin-bottom: 20px; max-width: 72ch; }
 .job-summary p { font-size: 15.5px; line-height: 1.7; color: var(--text-70); }
-.job-summary p ~ p { margin-top: 12px; }
 
 .job-bullets {
   list-style: none;
   columns: 2;
   column-gap: 40px;
-  padding-top: 22px;
+  padding-top: 20px;
   border-top: 1px solid var(--line);
 }
 .job-bullets li {
   position: relative;
   break-inside: avoid;
   padding-left: 20px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   font-size: 14.5px;
   line-height: 1.6;
   color: var(--text-70);
+}
+.job-bullets li strong {
+  color: var(--text-100);
+  font-weight: 600;
 }
 .job-bullets li::before {
   content: '';
@@ -1191,9 +1303,72 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
   animation: pulse 2s infinite;
 }
 
+/* Collapsible Foundation Drawer */
+.foundation-wrap {
+  margin-top: 16px;
+  padding-left: 248px;
+}
+.foundation-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 26px;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px dashed var(--line-2);
+  color: var(--text-100);
+  font-family: var(--sans);
+  cursor: pointer;
+  transition: border-color .25s, background .25s;
+}
+.foundation-toggle:hover {
+  border-color: rgba(124, 147, 255, 0.5);
+  background: rgba(51, 85, 255, 0.06);
+}
+.foundation-toggle-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.foundation-tag {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(51, 85, 255, 0.14);
+  border: 1px solid rgba(124, 147, 255, 0.25);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--cobalt-200);
+}
+.foundation-label {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.foundation-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-50);
+}
+.foundation-chevron {
+  width: 16px; height: 16px;
+  transition: transform .3s var(--ease);
+}
+.foundation-toggle.is-open .foundation-chevron { transform: rotate(180deg); }
+
+.foundation-panel {
+  margin-top: 32px;
+  margin-left: -248px;
+}
+
 
 /* ===========================
-   SPOTLIGHT (cursor-tracked light on cards — set by JS)
+   SPOTLIGHT
 =========================== */
 .spot::after {
   content: '';
@@ -1209,116 +1384,27 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
 
 
 /* ===========================
-   HIGHLIGHTS — bento grid
+   ABOUT (Section 03)
 =========================== */
-.highlights-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-}
-.highlight-card:nth-child(1),
-.highlight-card:nth-child(6) { grid-column: span 2; }
+#about { border-top: 1px solid var(--line); }
 
-.highlight-card {
-  position: relative;
-  overflow: hidden;
-  min-height: 300px;
-  display: flex;
-  flex-direction: column;
-  padding: 30px;
-  border-radius: var(--radius-lg);
-  background: var(--glass);
-  border: 1px solid var(--line);
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity .7s var(--ease), transform .5s var(--ease), border-color .3s;
-}
-.highlight-card.visible { opacity: 1; transform: none; }
-.highlight-card:hover { border-color: rgba(124,147,255,0.3); transform: translateY(-4px) !important; }
-
-/* Cobalt hairline on top edge */
-.highlight-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(124,147,255,0.7), transparent);
-  opacity: .6;
-}
-
-.highlight-icon {
-  width: 46px; height: 46px;
-  display: grid;
-  place-items: center;
-  margin-bottom: auto;
-  border-radius: 14px;
-  color: var(--cobalt-200);
-  background: rgba(51,85,255,0.12);
-  border: 1px solid rgba(124,147,255,0.25);
-  box-shadow: 0 0 30px -6px rgba(51,85,255,0.5);
-}
-.highlight-icon svg,
-.info-icon svg { width: 22px; height: 22px; }
-
-.highlight-card h4 {
-  position: relative;
-  margin-top: 40px;
-  margin-bottom: 10px;
-  font-size: 21px;
-  font-weight: 600;
-  letter-spacing: -0.025em;
-  line-height: 1.2;
-  color: var(--text-100);
-}
-.highlight-card p {
-  position: relative;
-  max-width: 52ch;
-  font-size: 14.5px;
-  line-height: 1.65;
-  color: var(--text-70);
-}
-.highlight-card:nth-child(1) h4,
-.highlight-card:nth-child(6) h4 { font-size: clamp(24px, 2.4vw, 30px); max-width: 18ch; }
-
-/* Oversized editorial numeral on the feature tiles */
-.hl-big {
-  position: absolute;
-  top: 6px; right: 26px;
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: clamp(90px, 11vw, 160px);
-  line-height: 1;
-  letter-spacing: -0.03em;
-  pointer-events: none;
-  background: linear-gradient(180deg, rgba(124,147,255,0.55), rgba(124,147,255,0));
-  -webkit-background-clip: text;
-          background-clip: text;
-  color: transparent;
-}
-.highlight-card:nth-child(6) .hl-big { top: 18px; right: 24px; font-size: clamp(64px, 7.5vw, 112px); }
-
-
-/* ===========================
-   ABOUT
-=========================== */
 .about-grid {
   display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
+  grid-template-columns: 1.08fr 0.92fr;
   gap: 72px;
   align-items: start;
 }
 .about-block h3 {
-  margin-bottom: 32px;
-  font-size: clamp(40px, 5vw, 68px);
-  line-height: 1;
+  margin-bottom: 28px;
+  font-size: clamp(38px, 4.8vw, 64px);
+  line-height: 1.02;
 }
 .about-lede {
-  margin-bottom: 26px !important;
-  font-size: 19px !important;
-  line-height: 1.6 !important;
-  letter-spacing: -0.01em;
+  margin-bottom: 24px !important;
+  font-size: 20px !important;
+  line-height: 1.55 !important;
+  letter-spacing: -0.015em;
   color: var(--text-100) !important;
-  opacity: .92;
 }
 .about-block p {
   font-size: 16px;
@@ -1377,16 +1463,15 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
 
 
 /* ===========================
-   CONTACT
+   CONTACT (Section 04)
 =========================== */
 #contact {
-  padding: 180px 0 160px;
+  padding: 170px 0 150px;
   text-align: center;
   overflow: hidden;
   isolation: isolate;
   border-top: 1px solid var(--line);
 }
-/* Glowing cobalt orb — the closing focal point */
 .contact-orb {
   position: absolute;
   left: 50%; top: 46%;
@@ -1414,12 +1499,12 @@ nav.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotat
 #contact .section-label::before { display: none; }
 #contact h2 {
   margin-bottom: 22px;
-  font-size: clamp(64px, 11vw, 168px);
+  font-size: clamp(64px, 11vw, 160px);
   line-height: .9;
 }
 #contact h2 .name-dot { color: var(--volt); }
 #contact p {
-  max-width: 440px;
+  max-width: 460px;
   margin: 0 auto 44px;
   font-size: 18px;
   color: var(--text-70);
@@ -1469,11 +1554,12 @@ footer a:hover { color: var(--text-100); }
 @media (max-width: 1080px) {
   .hero-inner {
     grid-template-columns: 1fr;
-    gap: 56px;
+    gap: 52px;
     padding: 130px 0 80px;
   }
   .hero-visual { max-width: 520px; width: 100%; margin: 0 auto; }
-  .hero-bio { max-width: 40ch; }
+  .hero-bio { max-width: 44ch; }
+  .section-head-split { flex-direction: column; align-items: flex-start; gap: 16px; }
 }
 
 @media (max-width: 900px) {
@@ -1482,7 +1568,7 @@ footer a:hover { color: var(--text-100); }
 }
 
 @media (max-width: 768px) {
-  section { padding: 100px 0; }
+  section { padding: 96px 0; }
   .wrapper { padding: 0 20px; }
 
   nav { padding: 0 8px 0 20px; height: 56px; }
@@ -1498,7 +1584,7 @@ footer a:hover { color: var(--text-100); }
     gap: 2px;
     padding: 10px;
     border-radius: 22px;
-    background: #0B0D13;     /* solid: a backdrop-filter nested inside the nav's own blur doesn't blur the page */
+    background: #0B0D13;
     border: 1px solid var(--line-2);
     box-shadow: 0 30px 80px rgba(0,0,0,0.7);
   }
@@ -1508,7 +1594,7 @@ footer a:hover { color: var(--text-100); }
   .hero-visual { padding: 14px; border-radius: 22px; }
   .rig-bar-hint { display: none; }
 
-  .section-title { margin-bottom: 48px; }
+  .section-head-split { margin-bottom: 44px; }
 
   .timeline::before { display: none; }
   .job { grid-template-columns: 1fr; gap: 12px; margin-bottom: 28px; }
@@ -1524,18 +1610,21 @@ footer a:hover { color: var(--text-100); }
   .job-content { padding: 26px 22px; border-radius: 22px; }
   .job-bullets { columns: 1; }
 
-  .skill-tag { font-size: 18px; padding: 20px 0 20px 22px; gap: 22px; }
+  .foundation-wrap { padding-left: 0; }
+  .foundation-panel { margin-left: 0; }
+  .foundation-toggle { flex-direction: column; align-items: flex-start; }
 }
 
 @media (max-width: 560px) {
   .hero-status { border-left: 0; padding-left: 0; }
+  .exec-proof-bar { grid-template-columns: 1fr; }
   .network-readout { grid-template-columns: 1fr; }
   .readout-line { padding: 8px 14px; }
   .highlights-grid { grid-template-columns: 1fr; }
   .highlight-card:nth-child(1),
   .highlight-card:nth-child(6) { grid-column: auto; }
   .highlight-card { min-height: 0; }
-  .highlight-card h4 { margin-top: 28px; }
+  .highlight-card h4 { margin-top: 8px; }
   .nav-cta { padding: 0 14px; }
   .btn { height: 48px; padding: 0 22px; font-size: 14.5px; }
   .contact-orb { width: 380px; height: 380px; margin: -190px 0 0 -190px; }
@@ -1546,7 +1635,6 @@ footer a:hover { color: var(--text-100); }
   .switch-unit::before, .switch-unit::after { display: none; }
 }
 
-/* Respect users who've asked for less motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: .001ms !important;
